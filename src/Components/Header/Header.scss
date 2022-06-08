@@ -1,0 +1,104 @@
+@import "../../index.scss";
+
+.header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+.header-item {
+   padding: 0 5px;
+   &:last-child {
+      padding: 0 5px 0 150px;
+   }
+}
+.header-list {
+   display: flex;
+   align-items: center;
+   gap: 32px;
+}
+.header-list-item {
+   font-weight: 400;
+   font-size: 16px;
+   line-height: 19px;
+   text-transform: uppercase;
+   position: relative;
+   padding: 30px 5px;
+   & a {
+      color: $colorBlack;
+   }
+   &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background-color: $colorGreen;
+      transition: all ease 0.4s;
+   }
+   &:hover a {
+      color: $colorGreen;
+      font-weight: 600;
+      &::after {
+         left: -20%;
+         width: 140%;
+      }
+   }
+   &:hover {
+      &::after {
+         left: -20%;
+         width: 140%;
+      }
+   }
+}
+.header-icon {
+   width: 32px;
+   height: 29px;
+   img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+   }
+}
+.header-service {
+   display: flex;
+   align-items: center;
+}
+.header-shoppingcart {
+   margin: 0px 0px 0px 25px;
+   width: 30px;
+   height: 30px;
+   cursor: pointer;
+   padding: 2px;
+   
+   img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      
+   }
+}
+// .header-currency {
+//    font-weight: 500;
+//    font-size: 18px;
+//    line-height: 29px;
+//    padding: 0 20px 0 0;
+//    cursor: pointer;
+//    position: relative;
+//    &::after{
+//       content: "";
+//       position: absolute;
+//       top: 50%;
+//       right: 0;
+//       width: 10px;
+//       height: 10px;
+//       background-image: url('../../images/arrowD.svg');
+//       background-repeat: no-repeat;
+//       // background-position: bottom;
+//    }
+//    img {
+//       width: 12px;
+//       height: 29px;
+//       object-fit: contain;
+//    }
+// }
