@@ -1,24 +1,38 @@
 const getCategoriesAndCurrency = (newCategryAndCurrency) => {
    return {
-      type: 'GET_CATEGORIES_&_CURRENCY',
+      type: 'FETCH_CATEGORIES_AND_CURRENCIES_REQUEST',
       payload: newCategryAndCurrency,
    };
 };
 
-const changeCurrency = (value) => {
+const fetchProductList = (newProductList) => {
    return {
-      type: 'CHANGE_CURRENCY',
-      payload: value,
+      type: 'FETCH_PRODUCT_LIST_REQUEST',
+      payload: newProductList,
    }
 };
 
+const updateCurrency = (currencyList) => {
+   return {
+      type: 'UPDATE_CURRENCY',
+      payload: currencyList,
+   }
+};
 
+const updateSelectedCategory = (newCategory) => {
+   return {
+      type: 'UPDATE_CATEGORY',
+      payload: newCategory,
+   }
+}
 
 
 
 export {
    getCategoriesAndCurrency,
-   changeCurrency
+   updateCurrency,
+   fetchProductList,
+   updateSelectedCategory,
 };
 
 

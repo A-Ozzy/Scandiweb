@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import ProductList from '../ProductList';
 
 class AllCategoryPage extends Component {
    render() {
       return (
          <div>
-            All Category Page
+            <ProductList/>
          </div>
       );
    }
