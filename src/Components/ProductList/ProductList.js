@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { fetchProductList } from '../../actions';
 import FetchingService from '../../queryService';
+import { updateOrders } from '../../actions';
 import { connect } from 'react-redux';
 import ProductItem from '../ProductItem';
+import cartWhite from '../../images/shoppingCart-white.svg';
+import { Link } from 'react-router-dom';
+
 import './ProductList.scss';
+
 
 class ProductList extends Component {
 
@@ -40,24 +45,74 @@ class ProductList extends Component {
          .then((res) => this.props.fetchProductList(res.category.products));
    };
 
+   onProductItemClick = (e) => {
+
+      console.log("карточка");
+
+   };
+
+   onAddToCart = (e) => {
+      e.stopPropagation();
+      const id = e.target.closest('.product-item').id;
+
+      const { getData } = this.fetchData;
+
+      const query = `
+         query($id: String!){
+            product(id: $id){
+              id
+              name
+              gallery
+              description
+              attributes{
+                id
+                name
+                type
+                items{
+                  displayValue
+                  value
+                  id
+                }
+              }
+              prices{
+                currency{
+                  label
+                  symbol
+                }
+                amount
+              }
+              brand
+            }
+          }
+        `;
+
+      const variables = {
+         id
+      };
+
+      getData(query, variables)
+         .then((res) => this.props.updateOrders(res));
+   }
 
    render() {
+
       const { productList } = this.props;
 
       const productItem = productList.map((item) => {
 
-         let classes = "product-item";
+         const classes = !item.inStock ? "product-item out-of-stock" : "product-item";
 
-         if (!item.inStock) {
-            classes += " out-of-stock";
-         }
-         
          return (
-            <li key={item.id} className={classes}>
-               <a href="#" className="priduct-link">
+            <li key={item.id} className={classes} id={item.id}
+               onClick={this.onProductItemClick}>
+               <Link to="#" className="product-link">
                   <ProductItem item={item} />
-               </a>
-            </li>   
+               </Link>
+               <div className="product-item-cart"
+                  onClick={this.onAddToCart}>
+                  <img src={cartWhite} alt="cart" />
+               </div>
+            </li>
          );
       });
 
@@ -75,14 +130,16 @@ class ProductList extends Component {
 };
 
 
-const mapStateToProps = ({ selectedCategory, productList }) => {
+const mapStateToProps = ({ mainReducer: { selectedCategory, productList, selectedCurrency } }) => {
    return {
       selectedCategory,
       productList,
+      selectedCurrency,
    }
 };
 
 const mapDispatchToProps = {
-   fetchProductList
+   fetchProductList,
+   updateOrders,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

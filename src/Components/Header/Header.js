@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import Spinner from '../spinner';
 import logo from '../../images/logo.svg';
 import shoppingCart from '../../images/shoppingCart.svg';
-import { getCategoriesAndCurrency, updateCurrency, updateSelectedCategory } from '../../actions';
+import { getCategoriesAndCurrency, updateCurrency, updateSelectedCategory, updateOpenCart } from '../../actions';
 import FetchingService from '../../queryService';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import CartOverlay from '../CartOverlay';
 
 import './Header.scss';
 
@@ -34,11 +35,15 @@ class Header extends Component {
    };
 
    handleChangeSelect = (e) => {
-      this.props.updateCurrency(e.target.value)
+      this.props.updateCurrency(e.target.value);
    };
 
    onCategoryChange = (e) => {
       this.props.updateSelectedCategory(e.target.textContent);
+   };
+
+   onCartClick = () => {
+      this.props.updateOpenCart(this.props.isCartOpen);
    }
 
    render() {
@@ -48,8 +53,13 @@ class Header extends Component {
          loading,
          currencies,
          selectedCurrency,
+         orders,
+         isCartOpen,
       } = this.props;
 
+      const classesOrdersCount = orders.length < 1 ?
+         'header-shoppingcart-count' :
+         'header-shoppingcart-count active';
 
       const categoryItem = loading ? <Spinner /> : categories.map((item) => {
          return (
@@ -59,15 +69,18 @@ class Header extends Component {
          )
       });
 
-      const currencyItem = currencies.map((item) => {
+      const currencyItem = currencies.map((item) => {  
          return (
             <option className="header-currency-item"
                key={item.label}
-               value={item.label}
+               value={`${item.label}${item.symbol}`}
             >{item.symbol} {item.label}
             </option>
          )
       });
+      const overlayClasses = isCartOpen ?
+         'header-shoppingcart-overlay active' :
+         'header-shoppingcart-overlay';
 
       return (
          <div className='header'>
@@ -86,15 +99,23 @@ class Header extends Component {
                <div className="header-service">
                   <div className="header-select">
                      <select className="header-currency"
-                        value={selectedCurrency}
+                        value={`${selectedCurrency.label}${selectedCurrency.symbol}`}
                         onChange={this.handleChangeSelect}>
                         {currencyItem}
                      </select>
                      <span className="currency-icon"></span>
                   </div>
-                  <Link to="/cart" className="header-shoppingcart">
-                     <img src={shoppingCart} alt="shoppingcart" />
-                  </Link>
+                  <div className='header-shoppingcart'
+                  onClick={this.onCartClick}>
+                     <div className="cart-icon">
+                        <img src={shoppingCart} alt="shoppingcart" />
+                     </div>
+                     <div className={classesOrdersCount}>{orders.length}</div>
+                    
+                     <div className={overlayClasses}>
+                        <CartOverlay selectedCurrency={selectedCurrency} />
+                     </div>
+                  </div>
                </div>
             </div>
          </div >
@@ -103,13 +124,23 @@ class Header extends Component {
 }
 
 
-const mapStateToProps = ({ categories, loading, currencies, selectedCurrency, selectedCategory }) => {
+const mapStateToProps = ({ mainReducer: {
+   categories,
+   loading,
+   currencies,
+   selectedCurrency,
+   selectedCategory
+},
+cartOverlayReducer: { orders, isCartOpen } }) => {
+
    return {
       categories,
       loading,
       currencies,
       selectedCurrency,
       selectedCategory,
+      orders,
+      isCartOpen,
    }
 };
 
@@ -117,6 +148,7 @@ const mapDispatchToProps = {
    getCategoriesAndCurrency,
    updateCurrency,
    updateSelectedCategory,
+   updateOpenCart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

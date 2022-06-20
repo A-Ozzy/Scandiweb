@@ -1,5 +1,35 @@
 @import "../../index.scss";
 
+// .item-container {
+//    position: relative;
+//    &::after {
+//       content: url("../../images/shoppingCart-white.svg");
+//       position: absolute;
+//       bottom: 10%;
+//       right: 0;
+//       width: 52px;
+//       height: 52px;
+//       background-color: rgb(94, 206, 123);
+//       border-radius: 50%;
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       padding: 5px 0 0 0;
+//       transition: all ease-in 0.3s 0s;
+//       opacity: 0;
+//       visibility: hidden;
+//       transform: scale(0.2, 0.2);
+//    }
+//    &:hover {
+//       &::after {
+//          opacity: 1;
+//          visibility: visible;
+//          transform: scale(1, 1);
+//       }
+//    }
+   
+// }
+
 
 .item-img {
    width: 100%;

@@ -5,6 +5,7 @@ import AllCategoryPage from '../pages/all-category-page';
 import ClothesCategoryPage from '../pages/clothes-category-page';
 import TechCategoryPage from '../pages/tech-category-page';
 import CartCategoryPage from '../pages/cart-page';
+import CartOverlay from '../CartOverlay';
 
 import './App.scss';
 
@@ -20,7 +21,7 @@ export default class App extends Component {
                <Route path="/all" component={AllCategoryPage} />
                <Route path="/clothes" component={ClothesCategoryPage} />
                <Route path="/tech" component={TechCategoryPage} />
-               <Route path="/cart" component={CartCategoryPage} />
+               {/* <Route path="/mini-cart" component={CartOverlay} /> */}
             </Switch>
 
          </div >
