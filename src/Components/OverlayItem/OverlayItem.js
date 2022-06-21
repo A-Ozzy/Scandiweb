@@ -25,7 +25,7 @@ class OverlayItem extends Component {
       this.props.updateAttributeInItem(selectedAttributeData);
    };
 
-   // Jesus Christ find class names for attributes value :)  (active / not active)
+   // search class names for attributes value :)  (active / not active)
    findClasses(itm, v, productId) {
 
       const productItem = this.props.orders.find(({ id }) => id === productId);
@@ -78,7 +78,7 @@ class OverlayItem extends Component {
                   data-name={itm.id.toLowerCase()}
                   data-value={v.id.toLowerCase()}
                   className={classes}>
-                  {v.id.toLowerCase()}
+                  {v.value}
                </li>
             )
          });

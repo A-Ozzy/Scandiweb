@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import OverlayItem from '../OverlayItem';
+import { NavLink } from 'react-router-dom';
+import { updateOpenCart } from '../../actions';
 
 import './CartOverlay.scss';
 
 class CartOverlay extends Component {
 
    render() {
-      const { orders, selectedCurrency, total } = this.props;
 
-         const overlayItems = orders.map((item) => {
-         
+      const { orders, selectedCurrency, total, isCartOpen } = this.props;
+
+      const overlayItems = orders.map((item) => {
+
          return (
-            <div key={ item.id } className="overlay-item item">
+            <div key={item.id} className="overlay-item item">
                <OverlayItem item={item} />
             </div>
-            
+
          )
 
       });
-      
+
       if (orders.length < 1) {
 
          return (
@@ -30,7 +33,7 @@ class CartOverlay extends Component {
       }
 
       return (
-         <div className='overlay' onClick={e=> e.stopPropagation()}>
+         <div className='overlay' onClick={e => e.stopPropagation()}>
             <div className="overlay-title">My Bag: <span>{orders.length} items</span></div>
             <div className="overlay-list">
                {overlayItems}
@@ -41,19 +44,24 @@ class CartOverlay extends Component {
                <div className="overlay-price">{`${selectedCurrency.symbol}${total}`}</div>
             </div>
             <div className="overlay-buttons buttons">
-               <button className="buttons-view btn" >view bag</button>
-               <button className="buttons-check btn">check out</button>
+               <NavLink to="/cart" className="buttons-view btn"
+               onClick={()=>this.props.updateOpenCart(isCartOpen)}>view bag</NavLink>
+               <NavLink to="/" className="buttons-check btn">check out</NavLink>
             </div>
          </div>
       )
    }
 }
 
-const mapStateToProps = ({ cartOverlayReducer: { orders, total } }) => {
+const mapStateToProps = ({ cartOverlayReducer: { orders, total, isCartOpen} }) => {
    return {
       orders,
-      total
+      total,
+      isCartOpen
    }
 };
+const mapDispatchToProps = {
+   updateOpenCart
+};
 
-export default connect(mapStateToProps)(CartOverlay);
+export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);

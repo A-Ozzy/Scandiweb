@@ -15,6 +15,16 @@ class ProductList extends Component {
    fetchData = new FetchingService();
 
    componentDidMount() {
+      this.fetchProductData();
+   };
+
+   componentDidUpdate(prevProps) {
+      if (this.props.selectedCategory !== prevProps.selectedCategory) {
+         this.fetchProductData();
+      }
+   };
+
+   fetchProductData() {
       const { getData } = this.fetchData;
 
       const query = `
