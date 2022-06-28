@@ -1,135 +1,12 @@
 @import "../../index.scss";
 
-.cart-list {
-   .item {
-      padding: 5px;
-      border-bottom: 1px solid #e5e5e5;
-      contain: layout inline-size;
-   }
-   .item-name-o {
-      font-weight: 600;
-      font-size: 30px;
-      line-height: 27px;
-   }
-   .item-price {
-      font-weight: 700;
-      font-size: 24px;
-      line-height: 24px;
-      margin: 20px 0px;
-   }
-
-   .item-info {
-      &-img {
-         width: 290px;
-         height: 200px;
-         img {
-            width: 100%;
-            height: 100%;
-
-            object-fit: contain;
-         }
-      }
-      &-quantity {
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: space-between;
-         margin: 5px;
-         font-size: 24px;
-      }
-   }
-   .attribute {
-      &-title {
-         font-family: "Roboto Condensed";
-         font-style: normal;
-         font-weight: 700;
-         font-size: 18px;
-         line-height: 18px;
-         margin: 0px 0px 7px 0px;
-      }
-      &-list {
-         margin: 5px 0px;
-         display: flex;
-         flex-wrap: wrap;
-      }
-      &-value {
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         padding: 10px;
-         border: 1px solid #000;
-         cursor: pointer;
-         &:not(last-child) {
-            margin: 0px 5px 5px 0px;
-         }
-         &:hover {
-            border: 1px solid #000;
-            background-color: #000;
-            color: #ffffff;
-         }
-      }
-   }
-   .btns {
-      width: 2rem;
-      height: 2rem;
-      border: 1px solid #000;
-      background-color: #fff;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      &:hover {
-         background-color: $colorGreen;
-         border: none;
-         color: #fff;
-      }
-   }
-
-   .btn-dec {
-      padding: 0 0 3px 0;
-   }
-
-   .attribute-value.active {
-      border: 1px solid #000;
-      background-color: #000;
-      color: #ffffff;
-   }
-
-   .attribute-value.color-value {
-      font-size: 3px;
-      width: 15px;
-      height: 15px;
-      position: relative;
-      z-index: 3;
-      &:not(last-child) {
-         margin: 0px 20px 10px 0px;
-      }
-      div {
-         position: absolute;
-         top: -2px;
-         left: -2px;
-         z-index: 4;
-         width: 32px;
-         height: 32px;
-         border: 1px solid #000;
-         &:hover {
-            border: 2px solid $colorGreen;
-            transform: scale(1.2);
-         }
-      }
-   }
-
-   .attribute-value.color-value.active {
-      transform: scale(1.2);
-      div {
-         border: 2px solid $colorGreen;
-      }
-   }
-}
-//  =========================================== mini-cart ========================
 .item-name-o {
    font-weight: 300;
    font-size: 16px;
+   color: #1d1f22;
+   &:hover{
+      font-weight: 500;
+   }
 }
 .item-price {
    margin: 10px 0;
@@ -140,11 +17,9 @@
 
 .item-info {
    &-img {
-      width: 100px;
-      height: 150px;
-      img {
-         object-fit: cover;
-      }
+      overflow: hidden;
+      height: 190px;
+      width: 120px;
    }
    &-quantity {
       display: flex;
@@ -153,7 +28,11 @@
       justify-content: space-between;
       margin: 5px;
    }
+   &-count{
+      text-align: center;
+   }
 }
+
 .attribute {
    &-title {
       margin: 0px 0px 10px 0px;
@@ -185,7 +64,6 @@
    width: 15px;
    height: 15px;
    position: relative;
-   z-index: 3;
    &:not(last-child) {
       margin: 0px 10px 10px 0px;
    }
@@ -193,7 +71,7 @@
       position: absolute;
       top: -2px;
       left: -2px;
-      z-index: 4;
+      // z-index: 4;
       width: 20px;
       height: 20px;
       border: 1px solid #000;

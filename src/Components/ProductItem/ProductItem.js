@@ -5,11 +5,30 @@ import './ProductItem.scss';
 class ProductItem extends Component {
 
    render() {
-      const { gallery, name, prices } = this.props.item;
+      const { gallery, name, prices, attributes, } = this.props.item;
 
 
       let price = 0;
-      // let symbol = '';
+      let swatch = null;
+
+      for (let i = 0; i < attributes.length; i++) {
+
+         if (Object.values(attributes[i]).includes('swatch')) {
+            swatch = attributes[i].items.map((v) => {
+               return (
+                  <li key={v.id} className="item-attribute" >
+                     <div data-name={this.props.item.id.toLowerCase()}
+                        data-value={v.id.toLowerCase()}
+                        data-id={this.props.item.id}
+                        style={{ backgroundColor: `${v.value}` }}>
+                     </div>
+                     {v.id.toLowerCase()}
+                  </li>
+               );
+            });
+         }
+
+      }
 
       for (let i = 0; i < prices.length; i++) {
 
@@ -19,7 +38,6 @@ class ProductItem extends Component {
             break;
          }
       }
-      // console.log(price);
 
 
       return (
@@ -28,6 +46,9 @@ class ProductItem extends Component {
                <img src={gallery ? gallery[0] : ""} alt="product" />
             </div>
             <div className="item-name">{name}</div>
+            <ul className='attribute-list'>
+               {swatch}
+            </ul>
             <div className="item-price"><span>{this.props.selectedCurrency.symbol}</span>{price}</div>
          </div>
       );

@@ -7,6 +7,14 @@ const initialState = {
 
 };
 
+const findItem = (state, newId) => {
+   return state.orders.find(({ id }) => id === newId);
+};
+
+const findIndex = (state, data) => {
+   return state.orders.findIndex(({ id }) => id === data);
+};
+
 const updateOrdersItem = (state, item, idx) => {
 
    if (item.count === 0) {
@@ -24,7 +32,7 @@ const updateOrdersItem = (state, item, idx) => {
       return {
          ...state,
          orders: [
-            ...state.orders, item
+            ...state.orders, item,
          ]
       };
    }
@@ -49,7 +57,8 @@ const updateCartItem = (product, item, quantity, newPrice) => {
          ...product,
          currentPriceInfo: newPrice,
          totalProductPrice: (item.count + quantity) * newPrice.amount,
-
+         currentSlideImg: 0,
+         extraOptions: { text: "", visible: false },
       }
    }
 
@@ -59,6 +68,7 @@ const updateCartItem = (product, item, quantity, newPrice) => {
          ...item,
          count: item.count + quantity,
          totalProductPrice: (item.count + quantity) * item.currentPriceInfo.amount,
+
       }
    }
 
@@ -146,11 +156,54 @@ const updateSelectedAttributes = (item, attributes) => {
 
 };
 
+const updateCurrentSlideImage = (state, data) => {
+
+   const { count } = data;
+
+   const item = state.orders.find(({ id }) => id === data.id);
+   const itemIndex = state.orders.findIndex(({ id }) => id === data.id);
+
+   const newItem = { ...item, currentSlideImg: count };
+
+   return {
+      ...state,
+      orders: [
+         ...state.orders.slice(0, itemIndex),
+         newItem,
+         ...state.orders.slice(itemIndex + 1),
+      ],
+   }
+};
+
+const updateExtraOptions = (state, itemId, val, text = "") => {
+
+   const orderItem = findItem(state, itemId);
+   const itemIdx = findIndex(state, itemId);
+
+   let newItem;
+   if (val) {
+      newItem = { ...orderItem, extraOptions: { ...orderItem.extraOptions, visible: val } };
+   }
+   if (text) {
+      newItem = { ...orderItem, extraOptions: { ...orderItem.extraOptions, text } };
+   }
+   if (!val && !text) {
+      newItem = { ...orderItem, extraOptions: { ...orderItem.extraOptions, text: "" } };
+   }
+   return {
+      ...state,
+      orders: [
+         ...state.orders.slice(0, itemIdx),
+         newItem,
+         ...state.orders.slice(itemIdx + 1),
+      ],
+   }
+};
+
 // reduser
 const cartOverlayReducer = (state = initialState, action) => {
 
    switch (action.type) {
-
       case 'UPDATE_ORDERS':
          return updateOrders(state, action.payload.product, 1);
 
@@ -159,6 +212,9 @@ const cartOverlayReducer = (state = initialState, action) => {
             ...state,
             isCartOpen: action.payload
          }
+      case 'UPDATE_CURRENT_SLIDE_IMG':
+         return updateCurrentSlideImage(state, action.payload);
+
       case 'UPDATE_COUNT_IN_CART_ITEM':
          return updateOrders(state, action.payload, 1);
 
@@ -167,13 +223,21 @@ const cartOverlayReducer = (state = initialState, action) => {
 
       case 'UPDATE_CURRENT_PRICE':
          const { amount, currency } = action.payload;
-         const item = state.orders.find(({ id }) => id === action.payload.id);
+         const item = findItem(state, action.payload.id);
          return updateOrders(state, item, 0, { ...currency, amount });
 
-      case 'UPDATR_ATTRIBUTE_IN_ITEM':
+      case 'UPDATE_ATTRIBUTE_IN_ITEM':
          const { selectedAttribute } = action.payload;
-         const productItem = state.orders.find(({ id }) => id === action.payload.id);
+         const productItem = findItem(state, action.payload.id);
          return updateOrders(state, productItem, 0, null, selectedAttribute);
+
+      case 'UPDATE_EXTRA_OPTIONS_VISIBLE':
+         const { id, val } = action.payload;
+         return updateExtraOptions(state, id, val, undefined);
+      
+      case 'UPDATE_EXTRA_OPTIONS_TEXT':
+         const { text } = action.payload;
+         return updateExtraOptions(state, action.payload.id, undefined, text);
 
       default:
          return state;

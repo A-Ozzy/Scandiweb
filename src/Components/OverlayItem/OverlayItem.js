@@ -1,49 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import AttributesList from '../AttributesList';
+import Slider from '../Slider/Slider';
+import ExtraOptions from '../ExtraOptions/ExtraOptions';
+import { Link, withRouter } from 'react-router-dom';
 import {
    updateCountInCartItem,
    decrementCountInCartItem,
    updateCurrentPrice,
-   updateAttributeInItem,
 } from '../../actions';
 
 import './OverlayItem.scss';
 
 class OverlayItem extends Component {
-
-   onSelectAttribute = (e) => {
-
-      const name = e.target.getAttribute('data-name');
-      const value = e.target.getAttribute('data-value');
-      const id = e.target.getAttribute('data-id');
-
-      const selectedAttributeData = {
-         id,
-         selectedAttribute: { name, value }
-      }
-
-      this.props.updateAttributeInItem(selectedAttributeData);
-   };
-
-   // search class names for attributes value :)  (active / not active)
-   findClasses(itm, v, productId) {
-
-      const productItem = this.props.orders.find(({ id }) => id === productId);
-
-      let classNames = `attribute-value ${itm.name.toLowerCase()}-value ${itm.name.toLowerCase()}`;
-      
-      if (productItem.selectedAttributes) {
-         const attributes = productItem.selectedAttributes;
-         for (const key in attributes) {
-            if (itm.name.toLowerCase() === key && v.id.toLowerCase() === attributes[key]) {
-               classNames = `attribute-value ${itm.name.toLowerCase()}-value ${v.id.toLowerCase()} active`;
-               break;
-            }
-         }
-      }
-
-      return classNames;
-   };
 
    onRenderAttributes(obj, itemId) {
 
@@ -54,46 +23,11 @@ class OverlayItem extends Component {
       // render attributes
       return obj.map((itm, i) => {
 
-         //render values of each attribute
-         const itmValue = itm.items.map((v) => {
-
-            const classes = this.findClasses(itm, v, itemId);
-
-            if (itm.name.toLowerCase() === "color") {
-               return (
-                  <li key={v.id}
-                     className={classes} >
-                     <div data-name={itm.id.toLowerCase()}
-                        data-value={v.id.toLowerCase()}
-                        data-id={itemId}
-                        style={{ backgroundColor: `${v.value}` }}>
-                     </div>
-                     {v.id.toLowerCase()}
-                  </li>
-               );
-            }
-            return (
-               <li key={v.id}
-                  data-id={itemId}
-                  data-name={itm.id.toLowerCase()}
-                  data-value={v.id.toLowerCase()}
-                  className={classes}>
-                  {v.value}
-               </li>
-            )
-         });
-
          return (
-            <div key={`${Date.now()}${i}`} className="items-atributes attributes">
-               <div className="attribute">
-                  <div className={`attribute-title ${itm.name.toLowerCase()}`}>{`${itm.name}:`}</div>
-                  <ul className={`attribute-list ${itm.name}-list ${itm.name}`}
-                     onClick={this.onSelectAttribute}>
-                     {itmValue}
-                  </ul>
-               </div>
+            <div key={`${Date.now()}${itm.name}`} className="items-atributes">
+               <AttributesList itm={itm} itemId={itemId} />
             </div>
-         )
+         );
 
       });
    };
@@ -151,14 +85,16 @@ class OverlayItem extends Component {
       }
 
       const renderedAttributes = this.onRenderAttributes(attributes, id);
-
+      const extraOptions = count > 1 ? <ExtraOptions item={ this.props.item } /> : null      
       return (
          <>
             <div className="item-params">
-               <div className="item-name-o">{name}</div>
-               <div className="item-price"><span>{priceInfo.currency.symbol}</span>{priceInfo.amount}
+               <Link to={`/product/${id}`} className="item-name-o">{name}</Link>
+               <div className="item-price">
+                  <span>{priceInfo.currency.symbol}</span>{priceInfo.amount}
                </div>
                {renderedAttributes}
+               {extraOptions}
             </div>
             <div className="item-info">
                <div className="item-info-quantity">
@@ -167,7 +103,7 @@ class OverlayItem extends Component {
                   <button className="btns btn-dec" onClick={this.updateCountInItem(id, -1)}>-</button>
                </div>
                <div className="item-info-img">
-                  <img src={gallery[0]} alt="img" />
+                  <Slider gallery={gallery} id={id}/>
                </div>
             </div>
          </>
@@ -186,7 +122,6 @@ const mapDispatchToProps = {
    updateCountInCartItem,
    decrementCountInCartItem,
    updateCurrentPrice,
-   updateAttributeInItem,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OverlayItem);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OverlayItem));

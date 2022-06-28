@@ -73,11 +73,52 @@ const updateCurrentPrice = (newPrice) => {
 
 const updateAttributeInItem = (data) => {
    return {
-      type: 'UPDATR_ATTRIBUTE_IN_ITEM',
+      type: 'UPDATE_ATTRIBUTE_IN_ITEM',
       payload: data,
    }
 };
 
+const updateProduct = (data) => {
+   return {
+      type: 'UPDATE_PRODUCT',
+      payload: data,
+   }
+};
+
+const updateActiveImg = (item) => {
+   return {
+      type: 'UPDATE_ACTIVE_IMG',
+      payload: item,
+   }
+};
+
+const updateAttributeInProduct = (newAttr) => {
+   return {
+      type: 'UPDATE_ATTRIBUTE_IN_PRODUCT',
+      payload: newAttr,
+   }
+};
+
+const updateCurrentSlideImg = (num) => {
+   return {
+      type: 'UPDATE_CURRENT_SLIDE_IMG',
+      payload: num,
+   }
+};
+
+const updateExtraOptionsVisible = (value) => {
+   return {
+      type: 'UPDATE_EXTRA_OPTIONS_VISIBLE',
+      payload: value,
+   }
+}
+
+const updateExtraOptionsText = (text) => {
+   return {
+      type: 'UPDATE_EXTRA_OPTIONS_TEXT',
+      payload: text,
+   }
+};
 
 export {
    getCategoriesAndCurrency,
@@ -90,6 +131,12 @@ export {
    decrementCountInCartItem,
    updateCurrentPrice,
    updateAttributeInItem,
+   updateProduct,
+   updateActiveImg,
+   updateAttributeInProduct,
+   updateCurrentSlideImg,
+   updateExtraOptionsVisible,
+   updateExtraOptionsText
 };
 
 

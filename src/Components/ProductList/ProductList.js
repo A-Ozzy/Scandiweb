@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { fetchProductList } from '../../actions';
+// import {  } from '../../actions';
 import FetchingService from '../../queryService';
-import { updateOrders } from '../../actions';
+import { updateOrders, fetchProductList } from '../../actions';
 import { connect } from 'react-redux';
 import ProductItem from '../ProductItem';
 import cartWhite from '../../images/shoppingCart-white.svg';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import './ProductList.scss';
 
@@ -30,19 +30,29 @@ class ProductList extends Component {
       const query = `
             query($category: String!){
                category(input:{title: $category}){
-                  products{
+                  products {
                      id
                      name
                      inStock
                      gallery
-                     prices{
-                        amount
-                        currency{
-                          label
-                          symbol
-                        }
-                      }
-                  }
+                     attributes{
+                       id
+                       name
+                       type
+                       items{
+                         displayValue
+                         value
+                         id
+                       }
+                     }
+                     prices {
+                       amount
+                       currency {
+                         label
+                         symbol
+                       }
+                     }
+                   }
                 }
             }
         `;
@@ -53,12 +63,6 @@ class ProductList extends Component {
 
       getData(query, variables)
          .then((res) => this.props.fetchProductList(res.category.products));
-   };
-
-   onProductItemClick = (e) => {
-
-      console.log("карточка");
-
    };
 
    onAddToCart = (e) => {
@@ -113,9 +117,8 @@ class ProductList extends Component {
          const classes = !item.inStock ? "product-item out-of-stock" : "product-item";
 
          return (
-            <li key={item.id} className={classes} id={item.id}
-               onClick={this.onProductItemClick}>
-               <Link to="#" className="product-link">
+            <li key={item.id} className={classes} id={item.id}>
+               <Link to={`/product/${item.id}`} className="product-link">
                   <ProductItem item={item} />
                </Link>
                <div className="product-item-cart"
@@ -152,4 +155,4 @@ const mapDispatchToProps = {
    fetchProductList,
    updateOrders,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductList));

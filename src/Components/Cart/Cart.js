@@ -21,7 +21,7 @@ class Cart extends Component {
       const tax = (total * 0.21).toFixed(2);
 
       return (
-         <div className='cart'>
+         <div className="cart">
             <div className="cart-title">Cart</div>
             <div className="cart-list">
                {overlayItems}

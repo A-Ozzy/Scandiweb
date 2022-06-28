@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import {  Route, Switch, Redirect } from 'react-router-dom';
 import Header from '../Header';
-// import AllCategoryPage from '../pages/all-category-page';
-// import ClothesCategoryPage from '../pages/clothes-category-page';
-// import TechCategoryPage from '../pages/tech-category-page';
 import CartPage from '../pages/cart-page';
-// import CartOverlay from '../CartOverlay';
 import ProductList from '../ProductList';
+import Product from '../Product';
 
 import './App.scss';
 
@@ -23,6 +20,9 @@ export default class App extends Component {
                <Route path="/clothes" component={ProductList} />
                <Route path="/tech" component={ProductList} />
                <Route path="/cart" component={CartPage} />
+               <Route path="/product/:id" render={({ match }) => {
+                  return <Product itemId={ match.params.id } />
+               }} />
             </Switch>
 
          </div >

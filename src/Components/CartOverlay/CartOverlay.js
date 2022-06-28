@@ -19,7 +19,7 @@ class CartOverlay extends Component {
                <OverlayItem item={item} />
             </div>
 
-         )
+         );
 
       });
 
@@ -46,7 +46,8 @@ class CartOverlay extends Component {
             <div className="overlay-buttons buttons">
                <NavLink to="/cart" className="buttons-view btn"
                onClick={()=>this.props.updateOpenCart(isCartOpen)}>view bag</NavLink>
-               <NavLink to="/" className="buttons-check btn">check out</NavLink>
+               <button className="buttons-check btn"
+               onClick={()=>this.props.updateOpenCart(isCartOpen)}>check out</button>
             </div>
          </div>
       )
