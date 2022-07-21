@@ -64,8 +64,12 @@ class Product extends Component {
 
    componentDidMount() {
 
-      const { itemId } = this.props;
-      this.getProduct(itemId);
+      // const { itemId } = this.props;
+      // this.getProduct(itemId);
+
+      if (this.props.itemId !== this.props.product.id) {
+         this.getProduct(this.props.itemId);
+      }
 
    };
 
@@ -74,9 +78,9 @@ class Product extends Component {
          this.renderGallery();
       }
 
-      if (this.props.itemId !== prevProps.itemId) {
-         this.getProduct(this.props.itemId);
-      }
+      // if (this.props.itemId !== this.props.product.id) {
+      //    this.getProduct(this.props.itemId);
+      // }
    };
 
    renderGallery() {
@@ -214,7 +218,8 @@ class Product extends Component {
    };
 
    render() {
-
+      // console.log(this.props.product.id);
+      
       const { activeImg, selectedCurrency } = this.props;
       const { name, attributes, description, prices, inStock, brand } = this.props.product;
 

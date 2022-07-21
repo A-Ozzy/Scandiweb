@@ -63,7 +63,6 @@ const decrementCountInCartItem = (item) => {
 };
 
 const updateCurrentPrice = (newPrice) => {
-   // console.log(newPrice);
    return {
       type: 'UPDATE_CURRENT_PRICE',
       payload: newPrice,
@@ -108,7 +107,7 @@ const updateCurrentSlideImg = (num) => {
 const clearSelectedAttributesInProduct = () => {
    return {
       type: 'CLEAR_SELECTED_ATTRIBUTES_IN_PRODUCT',
-      // payload: productItem
+
    }
 }
 
