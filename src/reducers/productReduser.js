@@ -50,6 +50,18 @@ const updateAttributeInProduct = (state, data) => {
    }
 };
 
+const clearAttributes = (state) => {
+   const newItem = {
+      ...state.product,
+      selectedAttributes: {},
+}
+   return {
+      ...state,
+      product: newItem,
+      
+   }
+};
+
 const productReducer = (state = initialState, action) => {
 
    switch (action.type) {
@@ -68,6 +80,9 @@ const productReducer = (state = initialState, action) => {
          }
       case 'UPDATE_ATTRIBUTE_IN_PRODUCT':
          return updateAttributeInProduct(state, action.payload);
+      
+      case 'CLEAR_SELECTED_ATTRIBUTES_IN_PRODUCT':
+         return clearAttributes(state);
       
       default:
          return state;

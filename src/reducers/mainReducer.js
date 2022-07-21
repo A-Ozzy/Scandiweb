@@ -5,6 +5,7 @@ const initialState = {
    selectedCurrency: [],
    selectedCategory: '',
    productList: [],
+   dropdomnIsOpen: false,
 }
 
 
@@ -25,6 +26,11 @@ const mainReducer = (state = initialState, action) => {
          return {
             ...state,
             selectedCurrency: action.payload
+         }
+      case 'UPDATE_DROPDOWN':
+         return {
+            ...state,
+            dropdomnIsOpen: action.payload
          }
       case 'UPDATE_CATEGORY':
          return {

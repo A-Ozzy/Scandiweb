@@ -10,15 +10,16 @@ class Cart extends Component {
 
       const { orders, total, selectedCurrency } = this.props;
 
-      const overlayItems = orders.map((item) => {
+      const overlayItems = orders.map((item, i) => {
          return (
-            <div key={item.id} className="overlay-item item">
+            <div key={`${item.name}${i}`} className="overlay-item item">
                <OverlayItem item={item} />
             </div>
          );
       });
 
       const tax = (total * 0.21).toFixed(2);
+      const quantity = orders.reduce((acc, curr) => acc + curr.count, 0);
 
       return (
          <div className="cart">
@@ -36,7 +37,7 @@ class Cart extends Component {
                   </div>
                   <div className="infoitem-values">
                      <div className="infoitem-value">{`${selectedCurrency.symbol}${tax}`}</div>
-                     <div className="infoitem-value">{orders.length}</div>
+                     <div className="infoitem-value">{quantity}</div>
                      <div className="infoitem-value">{`${selectedCurrency.symbol}${total}`}</div>
                   </div>
                </div>

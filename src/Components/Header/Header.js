@@ -5,8 +5,9 @@ import logo from '../../images/logo.svg';
 import shoppingCart from '../../images/shoppingCart.svg';
 import { getCategoriesAndCurrency, updateCurrency, updateSelectedCategory, updateOpenCart } from '../../actions';
 import FetchingService from '../../queryService';
-import { NavLink } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import CartOverlay from '../CartOverlay';
+import Dropdown from '../Dropdown';
 
 import './Header.scss';
 
@@ -34,16 +35,15 @@ class Header extends Component {
          .then((res) => this.props.getCategoriesAndCurrency(res));
    };
 
-   handleChangeSelect = (e) => {
-      this.props.updateCurrency(e.target.value);
-   };
 
    onCategoryChange = (e) => {
       this.props.updateSelectedCategory(e.target.textContent);
    };
 
-   onCartClick = () => {
-      this.props.updateOpenCart(this.props.isCartOpen);
+   componentDidUpdate(prevProps) {
+      if (this.props.isCartOpen !== prevProps.isCartOpen) {
+         document.body.classList.toggle("lock");
+      }
    }
 
    render() {
@@ -51,39 +51,22 @@ class Header extends Component {
       const {
          categories,
          loading,
-         currencies,
          selectedCurrency,
          orders,
          isCartOpen,
       } = this.props;
 
-      const classesOrdersCount = orders.length < 1 ?
-         'header-shoppingcart-count' :
-         'header-shoppingcart-count active';
-
       const categoryItem = loading ? <Spinner /> : categories.map((item) => {
          return (
             <li className="header-list-item" key={item.name}>
-               <NavLink to={`/${item.name.toLowerCase()}`} className="header-list-link">{item.name}</NavLink>
+               <NavLink to={`/category/${item.name.toLowerCase()}`} className="header-list-link">{item.name}</NavLink>
             </li>
          )
       });
-
-      const currencyItem = currencies.map((item) => {  
-         return (
-            <option className="header-currency-item"
-               key={item.label}
-               value={`${item.label}${item.symbol}`}
-            >{item.symbol} {item.label}
-            </option>
-         )
-      });
-      const overlayClasses = isCartOpen ?
-         'header-shoppingcart-overlay active' :
-         'header-shoppingcart-overlay';
+      const quantity = orders.reduce((acc, curr) => acc + curr.count, 0);
 
       return (
-         <div className='header'>
+         <div className={`header ${isCartOpen ?'active' : ''}`}>
             <div className="header-item">
                <ul className="header-list"
                   onClick={this.onCategoryChange}>
@@ -98,21 +81,15 @@ class Header extends Component {
             <div className="header-item">
                <div className="header-service">
                   <div className="header-select">
-                     <select className="header-currency"
-                        value={`${selectedCurrency.label}${selectedCurrency.symbol}`}
-                        onChange={this.handleChangeSelect}>
-                        {currencyItem}
-                     </select>
-                     <span className="currency-icon"></span>
+                     <Dropdown />
                   </div>
                   <div className='header-shoppingcart'
-                  onClick={this.onCartClick}>
+                     onClick={()=> this.props.updateOpenCart(this.props.isCartOpen)}>
                      <div className="cart-icon">
                         <img src={shoppingCart} alt="shoppingcart" />
                      </div>
-                     <div className={classesOrdersCount}>{orders.length}</div>
-                    
-                     <div className={overlayClasses}>
+                     <div className={`header-shoppingcart-count ${orders.length < 1 ? "" : "active"}`}>{quantity}</div>
+                     <div className={`header-shoppingcart-overlay ${isCartOpen ? "active" : ""}`}>
                         <CartOverlay selectedCurrency={selectedCurrency} />
                      </div>
                   </div>
@@ -131,7 +108,7 @@ const mapStateToProps = ({ mainReducer: {
    selectedCurrency,
    selectedCategory
 },
-cartOverlayReducer: { orders, isCartOpen } }) => {
+   cartOverlayReducer: { orders, isCartOpen } }) => {
 
    return {
       categories,
@@ -151,4 +128,4 @@ const mapDispatchToProps = {
    updateOpenCart
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

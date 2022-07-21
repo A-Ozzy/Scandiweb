@@ -1,9 +1,16 @@
 @import "../../index.scss";
 
+.item-brand{
+   margin: 0px 0px 8px 0px;
+   font-weight: 300;
+   font-size: 16px;
+}
 .item-name-o {
    font-weight: 300;
    font-size: 16px;
+   line-height: 20px;
    color: #1d1f22;
+   margin: 2px;
    &:hover{
       font-weight: 500;
    }

@@ -27,7 +27,6 @@ class ProductItem extends Component {
                );
             });
          }
-
       }
 
       for (let i = 0; i < prices.length; i++) {

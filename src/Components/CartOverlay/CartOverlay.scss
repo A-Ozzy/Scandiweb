@@ -1,6 +1,10 @@
 @import "../../index.scss";
 .overlay {
    font-size: 16px;
+   position: relative;
+   &-empty{
+      text-align: center;
+   }
    &-title {
       font-weight: 700;
       font-size: 16px;

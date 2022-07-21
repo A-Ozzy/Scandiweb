@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import OverlayItem from '../OverlayItem';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { updateOpenCart } from '../../actions';
 
 import './CartOverlay.scss';
@@ -12,10 +12,10 @@ class CartOverlay extends Component {
 
       const { orders, selectedCurrency, total, isCartOpen } = this.props;
 
-      const overlayItems = orders.map((item) => {
+      const overlayItems = orders.map((item, i) => {
 
          return (
-            <div key={item.id} className="overlay-item item">
+            <div key={`${item.id}${i}`} className="overlay-item item">
                <OverlayItem item={item} />
             </div>
 
@@ -27,7 +27,7 @@ class CartOverlay extends Component {
 
          return (
             <div className='overlay'>
-               <div style={{ textAlign: "center" }}>Сart is empty</div>
+               <div className='overlay-empty'>Сart is empty</div>
             </div>
          )
       }
@@ -44,8 +44,8 @@ class CartOverlay extends Component {
                <div className="overlay-price">{`${selectedCurrency.symbol}${total}`}</div>
             </div>
             <div className="overlay-buttons buttons">
-               <NavLink to="/cart" className="buttons-view btn"
-               onClick={()=>this.props.updateOpenCart(isCartOpen)}>view bag</NavLink>
+               <Link to="/cart" className="buttons-view btn"
+               onClick={()=>this.props.updateOpenCart(isCartOpen)}>view bag</Link>
                <button className="buttons-check btn"
                onClick={()=>this.props.updateOpenCart(isCartOpen)}>check out</button>
             </div>

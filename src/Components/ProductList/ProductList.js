@@ -19,7 +19,7 @@ class ProductList extends Component {
    };
 
    componentDidUpdate(prevProps) {
-      if (this.props.selectedCategory !== prevProps.selectedCategory) {
+      if (this.props.category !== prevProps.category) {
          this.fetchProductData();
       }
    };
@@ -58,7 +58,7 @@ class ProductList extends Component {
         `;
 
       const variables = {
-         category: this.props.selectedCategory,
+         category: this.props.category,
       };
 
       getData(query, variables)
@@ -109,15 +109,12 @@ class ProductList extends Component {
    }
 
    render() {
-
+      
       const { productList } = this.props;
 
       const productItem = productList.map((item) => {
-
-         const classes = !item.inStock ? "product-item out-of-stock" : "product-item";
-
          return (
-            <li key={item.id} className={classes} id={item.id}>
+            <li key={item.id} className={`product-item ${!item.inStock ? "out-of-stock" : ""}`} id={item.id}>
                <Link to={`/product/${item.id}`} className="product-link">
                   <ProductItem item={item} />
                </Link>
@@ -131,7 +128,7 @@ class ProductList extends Component {
 
       return (
          <div className="list-container">
-            <div className="list-title">Category: {this.props.selectedCategory.toUpperCase()}</div>
+            <div className="list-title">Category: {this.props.category.toUpperCase()}</div>
             <div className="product-item-container">
                <ul className="product-item-list">
                   {productItem}

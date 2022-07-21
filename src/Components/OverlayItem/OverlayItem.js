@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AttributesList from '../AttributesList';
 import Slider from '../Slider/Slider';
-import ExtraOptions from '../ExtraOptions/ExtraOptions';
 import { Link, withRouter } from 'react-router-dom';
 import {
    updateCountInCartItem,
@@ -14,7 +13,7 @@ import './OverlayItem.scss';
 
 class OverlayItem extends Component {
 
-   onRenderAttributes(obj, itemId) {
+   onRenderAttributes(obj, itemKey) {
 
       if (!obj || obj.length < 1) {
          return <div className="items-atributes"></div>;
@@ -22,21 +21,21 @@ class OverlayItem extends Component {
 
       // render attributes
       return obj.map((itm, i) => {
-
+         
          return (
             <div key={`${Date.now()}${itm.name}`} className="items-atributes">
-               <AttributesList itm={itm} itemId={itemId} />
+               <AttributesList itm={itm} itemKey={itemKey} />
             </div>
          );
 
       });
    };
 
-   updateCountInItem = (itemid, action) => (e) => {
+   updateCountInItem = (newItemKey, action) => (e) => {
       e.stopPropagation();
       const { orders } = this.props;
 
-      const item = orders[orders.findIndex(({ id }) => id === itemid)];
+      const item = orders[orders.findIndex(({ itemKey }) => itemKey === newItemKey)];
 
       if (action === +1) {
          this.props.updateCountInCartItem(item);
@@ -46,7 +45,9 @@ class OverlayItem extends Component {
    };
 
    getCurrentPrice() {
-      const { prices, id } = this.props.item;
+     
+      const { item } = this.props;
+      const { prices, itemKey} = this.props.item;
 
       let priceInfo;
 
@@ -57,7 +58,7 @@ class OverlayItem extends Component {
             break;
          }
       }
-      this.props.updateCurrentPrice({ ...priceInfo, id });
+      this.props.updateCurrentPrice({ ...priceInfo, item });
    };
 
    componentDidMount() {
@@ -71,8 +72,8 @@ class OverlayItem extends Component {
    };
 
    render() {
-
-      const { id, name, attributes, gallery, prices, count } = this.props.item;
+      
+      const { id, name, attributes, gallery, prices, count, brand, itemKey } = this.props.item;
 
       let priceInfo;
 
@@ -84,26 +85,26 @@ class OverlayItem extends Component {
          }
       }
 
-      const renderedAttributes = this.onRenderAttributes(attributes, id);
-      const extraOptions = count > 1 ? <ExtraOptions item={ this.props.item } /> : null      
+      const renderedAttributes = this.onRenderAttributes(attributes, itemKey);
+      
       return (
          <>
             <div className="item-params">
+               <div className="item-brand">{ brand }</div>
                <Link to={`/product/${id}`} className="item-name-o">{name}</Link>
                <div className="item-price">
                   <span>{priceInfo.currency.symbol}</span>{priceInfo.amount}
                </div>
                {renderedAttributes}
-               {extraOptions}
             </div>
             <div className="item-info">
                <div className="item-info-quantity">
-                  <button className="btns btn-inc" onClick={this.updateCountInItem(id, +1)}>+</button>
+                  <button className="btns btn-inc" onClick={this.updateCountInItem(itemKey, +1)}>+</button>
                   <div className="item-info-count">{count}</div>
-                  <button className="btns btn-dec" onClick={this.updateCountInItem(id, -1)}>-</button>
+                  <button className="btns btn-dec" onClick={this.updateCountInItem(itemKey, -1)}>-</button>
                </div>
                <div className="item-info-img">
-                  <Slider gallery={gallery} id={id}/>
+                  <Slider gallery={gallery} itemKey={itemKey}/>
                </div>
             </div>
          </>

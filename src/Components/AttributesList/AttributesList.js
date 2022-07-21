@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 import { updateAttributeInItem, updateAttributeInProduct } from '../../actions';
 
@@ -8,8 +8,12 @@ import './AttributesList.scss';
 
 class AttributesList extends Component {
 
-   onSelectAttribute = (e) => {
+   constructor() {
+      super();
+      this.attributeRef = createRef();
+   }
 
+   onSelectAttribute = (e) => {
       const name = e.target.getAttribute('data-name');
       const value = e.target.getAttribute('data-value');
       const id = e.target.getAttribute('data-id');
@@ -17,47 +21,18 @@ class AttributesList extends Component {
       const selectedAttributeData = {
          id,
          selectedAttribute: { name, value }
-      }
+      };
 
-      if (e.target.closest('.product-page-item') && this.props.orders.length < 1) {
-
-         const parent = document.querySelectorAll("[data-name]");
-         parent.forEach(el => el.classList.remove('active'));
-         e.target.classList.add('active');
-
-         this.props.updateAttributeInProduct(selectedAttributeData);
-      } else {
-         this.props.updateAttributeInItem(selectedAttributeData);
-
-      }
-
-
-
+      this.props.updateAttributeInItem(selectedAttributeData);
    };
 
-   findClasses(itm, v, productId) {
+   findClasses(itm, v, newItemKey) {
 
 
-      const productItem = this.props.orders.find(({ id }) => id === productId);
+      const productItem = this.props.orders.find(({ itemKey }) => itemKey === newItemKey);
 
       let classNames = `attribute-value ${itm.name.toLowerCase()}-value ${itm.name.toLowerCase()}`;
 
-      // classes in product page
-      if (!productItem) {
-
-         const { selectedAttributes } = this.props.product;
-         if (selectedAttributes) {
-            for (const key in selectedAttributes) {
-               if (itm.name.toLowerCase() === key && v.id.toLowerCase() === selectedAttributes[key]) {
-                  classNames = `attribute-value ${itm.name.toLowerCase()}-value ${v.id.toLowerCase()} active`;
-                  break;
-               }
-            }
-         }
-
-      }
-
-      // classes in cart page & overlay-cart
       if (productItem?.selectedAttributes) {
          const attributes = productItem.selectedAttributes;
          for (const key in attributes) {
@@ -70,11 +45,11 @@ class AttributesList extends Component {
       return classNames;
    };
 
-   onRenderAttributes(itm, itemId) {
+   onRenderAttributes(itm, itemId, itemKey) {
 
       return itm.items.map((v) => {
 
-         const classes = this.findClasses(itm, v, itemId);
+         const classes = this.findClasses(itm, v, itemKey);
 
          if (itm.name.toLowerCase() === "color") {
             return (
@@ -82,7 +57,7 @@ class AttributesList extends Component {
                   className={classes} >
                   <div data-name={itm.id.toLowerCase()}
                      data-value={v.id.toLowerCase()}
-                     data-id={itemId}
+                     data-id={itemKey}
                      style={{ backgroundColor: `${v.value}` }}>
                   </div>
                   {v.id.toLowerCase()}
@@ -91,7 +66,7 @@ class AttributesList extends Component {
          }
          return (
             <li key={v.id}
-               data-id={itemId}
+               data-id={itemKey}
                data-name={itm.id.toLowerCase()}
                data-value={v.id.toLowerCase()}
                className={classes}>
@@ -102,15 +77,15 @@ class AttributesList extends Component {
    };
 
    render() {
-      const { itm, itemId } = this.props;
+      const { itm, itemId, itemKey } = this.props;
 
-      const itmValue = this.onRenderAttributes(itm, itemId);
+      const itmValue = this.onRenderAttributes(itm, itemId, itemKey);
 
       return (
-         <div className="items-atributes attributes">
+         <div className="items-attributes attributes">
             <div className="attribute">
                <div className={`attribute-title ${itm.name.toLowerCase()}`}>{`${itm.name}:`}</div>
-               <ul className={`attribute-list ${itm.name}-list ${itm.name}`}
+               <ul ref={this.attributeRef} className={`attribute-list ${itm.name}-list ${itm.name}`}
                   onClick={this.onSelectAttribute}>
                   {itmValue}
                </ul>

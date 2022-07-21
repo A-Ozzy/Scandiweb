@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {  Route, Switch, Redirect } from 'react-router-dom';
 import Header from '../Header';
-import CartPage from '../pages/cart-page';
+import Cart from '../Cart';
 import ProductList from '../ProductList';
 import Product from '../Product';
 
@@ -15,16 +15,15 @@ export default class App extends Component {
          <div className="container">
             <Header />
             <Switch>
-               <Redirect from="/" to="/all" component={ProductList} exact />
-               <Route path="/all" component={ProductList} />
-               <Route path="/clothes" component={ProductList} />
-               <Route path="/tech" component={ProductList} />
-               <Route path="/cart" component={CartPage} />
+               <Redirect from="/" to="/category/all" component={ProductList} exact />
+               <Route path="/category/:category" render={({ match }) => {
+                  return <ProductList category={ match.params.category } />
+               }} />
+               <Route path="/cart" component={Cart} /> 
                <Route path="/product/:id" render={({ match }) => {
                   return <Product itemId={ match.params.id } />
                }} />
             </Switch>
-
          </div >
       );
    };

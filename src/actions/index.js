@@ -12,21 +12,19 @@ const fetchProductList = (newProductList) => {
    }
 };
 
-const updateCurrency = (currencyList) => {
-
-   const label = currencyList.slice(0, 3);
-   const symbol = currencyList.slice(3);
-
-   const newList = {
-      label,
-      symbol,
-   }
-
+const updateCurrency = (newCurrency) => {
    return {
       type: 'UPDATE_CURRENCY',
-      payload: newList,
+      payload: newCurrency,
    }
 };
+
+const updateDropdown = (newValue) => {
+   return {
+      type: 'UPDATE_DROPDOWN',
+      payload: newValue,
+   }
+}
 
 const updateSelectedCategory = (newCategory) => {
    return {
@@ -65,6 +63,7 @@ const decrementCountInCartItem = (item) => {
 };
 
 const updateCurrentPrice = (newPrice) => {
+   // console.log(newPrice);
    return {
       type: 'UPDATE_CURRENT_PRICE',
       payload: newPrice,
@@ -106,23 +105,17 @@ const updateCurrentSlideImg = (num) => {
    }
 };
 
-const updateExtraOptionsVisible = (value) => {
+const clearSelectedAttributesInProduct = () => {
    return {
-      type: 'UPDATE_EXTRA_OPTIONS_VISIBLE',
-      payload: value,
+      type: 'CLEAR_SELECTED_ATTRIBUTES_IN_PRODUCT',
+      // payload: productItem
    }
 }
-
-const updateExtraOptionsText = (text) => {
-   return {
-      type: 'UPDATE_EXTRA_OPTIONS_TEXT',
-      payload: text,
-   }
-};
 
 export {
    getCategoriesAndCurrency,
    updateCurrency,
+   updateDropdown,
    fetchProductList,
    updateSelectedCategory,
    updateOrders,
@@ -135,8 +128,7 @@ export {
    updateActiveImg,
    updateAttributeInProduct,
    updateCurrentSlideImg,
-   updateExtraOptionsVisible,
-   updateExtraOptionsText
+   clearSelectedAttributesInProduct,
 };
 
 

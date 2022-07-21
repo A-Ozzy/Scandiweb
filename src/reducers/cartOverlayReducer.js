@@ -7,12 +7,76 @@ const initialState = {
 
 };
 
-const findItem = (state, newId) => {
-   return state.orders.find(({ id }) => id === newId);
-};
+// const findItemWithKey = (state, newKey) => {
+//    return state.orders.find(({ itemKey }) => itemKey === newKey);
+// };
 
-const findIndex = (state, data) => {
-   return state.orders.findIndex(({ id }) => id === data);
+// const findIndexWithId = (state, newId) => {
+//    return state.orders.findIndex(({ id }) => id === newId);
+// };
+
+const handlingItem = (state, product) => {
+
+   if (!product.hasOwnProperty("selectedAttributes")) {
+      let attributesObj;
+
+      for (let i = 0; i < product.attributes.length; i++) {
+
+         attributesObj = {
+            ...attributesObj,
+            [product.attributes[i].id.toLowerCase()]: product.attributes[i].items[0].id.toLowerCase()
+         }
+      }
+      product = {
+         ...product,
+         selectedAttributes: attributesObj,
+      }
+   }
+
+
+   const ordersArray = state.orders.filter(({ id }) => id === product.id);
+
+   let itemIndex = -1;
+   let item = state.orders[itemIndex];
+
+   if (ordersArray.length > 0) {
+
+      for (let i = 0; i < ordersArray.length; i++) {
+         let isIqual;
+         if (product.hasOwnProperty("selectedAttributes")) {
+
+            for (const key in product.selectedAttributes) {
+
+               if (Object.keys(ordersArray[i].selectedAttributes).includes(key)) {
+                  if (ordersArray[i].selectedAttributes[key] === product.selectedAttributes[key]) {
+                     isIqual = true;
+                  } else {
+                     isIqual = false;
+                     break;
+                  }
+               }
+
+            }
+         }
+
+         if (isIqual) {
+
+            const hendeledKey = ordersArray[i].itemKey;
+            itemIndex = state.orders.findIndex(({ itemKey }) => itemKey === hendeledKey);
+            item = state.orders[itemIndex];
+         }
+         if (isIqual === undefined && ordersArray.length === 1) {
+            const hendeledKey = ordersArray[0].itemKey;
+            itemIndex = state.orders.findIndex(({ itemKey }) => itemKey === hendeledKey);
+            item = state.orders[itemIndex];
+         }
+
+      }
+
+   }
+
+   return { item, itemIndex };
+
 };
 
 const updateOrdersItem = (state, item, idx) => {
@@ -29,6 +93,8 @@ const updateOrdersItem = (state, item, idx) => {
    }
 
    if (idx === -1) {
+      // console.log('new item');
+
       return {
          ...state,
          orders: [
@@ -53,17 +119,17 @@ const updateCartItem = (product, item, quantity, newPrice) => {
 
    // update currency in order item
    if (item && newPrice) {
+
       return {
-         ...product,
+         ...item,
          currentPriceInfo: newPrice,
          totalProductPrice: (item.count + quantity) * newPrice.amount,
-         currentSlideImg: 0,
-         extraOptions: { text: "", visible: false },
       }
    }
 
    //update count in order item
    if (item && !newPrice) {
+
       return {
          ...item,
          count: item.count + quantity,
@@ -74,34 +140,63 @@ const updateCartItem = (product, item, quantity, newPrice) => {
 
    // add new item to orders with initial count=1
    if (!item && !newPrice) {
+
+      let attributesObj;
+
+      if (product.hasOwnProperty("selectedAttributes")) {
+         attributesObj = product.selectedAttributes;
+      }
+      if (product.attributes.length > 0 && !product.hasOwnProperty("selectedAttributes")) {
+         for (let i = 0; i < product.attributes.length; i++) {
+
+            attributesObj = {
+               ...attributesObj,
+               [product.attributes[i].id.toLowerCase()]: product.attributes[i].items[0].id.toLowerCase()
+            }
+         }
+      }
+
       return {
          ...product,
-         count: quantity
+         itemKey: product.id + Date.now(),
+         count: quantity,
+         currentSlideImg: 0,
+         selectedAttributes: attributesObj
       }
    }
 
 };
 
-const updateOrders = (state, product = {}, quantity, newPrice, attributes) => {
-
+const updateOrders = (state, product = {}, quantity, newPrice, newAttributes) => {
 
    // if item exist -> find index
-   const itemIndex = state.orders.findIndex(({ id }) => id === product.id);
+   let itemIndex = state.orders.findIndex(({ id }) => id === product.id);
 
    // get item of that index
-   const item = state.orders[itemIndex];
+   let item = state.orders[itemIndex];
 
-
-   // const newItem = updateCartItem(product, item, quantity);
    let newItem;
-   if (attributes) {
-      newItem = updateSelectedAttributes(item, attributes);
+
+   if (newAttributes) {
+
+      itemIndex = state.orders.findIndex(({ itemKey }) => itemKey === product);
+      item = state.orders[itemIndex];
+
+      newItem = updateSelectedAttributes(item, newAttributes);
    }
    if (newPrice) {
-      newItem = updateCartItem(product, item, 0, newPrice);
+
+      itemIndex = state.orders.findIndex(({ itemKey }) => itemKey === product.itemKey);
+      const itemOfOrder = state.orders[itemIndex];
+
+      newItem = updateCartItem(product, itemOfOrder, 0, newPrice);
    }
-   if (!attributes && !newPrice) {
-      newItem = updateCartItem(product, item, quantity);
+   if (product && !newAttributes && !newPrice) {
+
+      const handledData = handlingItem(state, product);
+      itemIndex = handledData.itemIndex;
+      newItem = updateCartItem(product, handledData.item, quantity);
+
    }
 
    // get updated state
@@ -160,8 +255,8 @@ const updateCurrentSlideImage = (state, data) => {
 
    const { count } = data;
 
-   const item = state.orders.find(({ id }) => id === data.id);
-   const itemIndex = state.orders.findIndex(({ id }) => id === data.id);
+   const item = state.orders.find(({ itemKey }) => itemKey === data.itemKey);
+   const itemIndex = state.orders.findIndex(({ itemKey }) => itemKey === data.itemKey);
 
    const newItem = { ...item, currentSlideImg: count };
 
@@ -175,30 +270,6 @@ const updateCurrentSlideImage = (state, data) => {
    }
 };
 
-const updateExtraOptions = (state, itemId, val, text = "") => {
-
-   const orderItem = findItem(state, itemId);
-   const itemIdx = findIndex(state, itemId);
-
-   let newItem;
-   if (val) {
-      newItem = { ...orderItem, extraOptions: { ...orderItem.extraOptions, visible: val } };
-   }
-   if (text) {
-      newItem = { ...orderItem, extraOptions: { ...orderItem.extraOptions, text } };
-   }
-   if (!val && !text) {
-      newItem = { ...orderItem, extraOptions: { ...orderItem.extraOptions, text: "" } };
-   }
-   return {
-      ...state,
-      orders: [
-         ...state.orders.slice(0, itemIdx),
-         newItem,
-         ...state.orders.slice(itemIdx + 1),
-      ],
-   }
-};
 
 // reduser
 const cartOverlayReducer = (state = initialState, action) => {
@@ -222,22 +293,12 @@ const cartOverlayReducer = (state = initialState, action) => {
          return updateOrders(state, action.payload, -1);
 
       case 'UPDATE_CURRENT_PRICE':
-         const { amount, currency } = action.payload;
-         const item = findItem(state, action.payload.id);
+         const { amount, currency, item } = action.payload;
          return updateOrders(state, item, 0, { ...currency, amount });
 
       case 'UPDATE_ATTRIBUTE_IN_ITEM':
          const { selectedAttribute } = action.payload;
-         const productItem = findItem(state, action.payload.id);
-         return updateOrders(state, productItem, 0, null, selectedAttribute);
-
-      case 'UPDATE_EXTRA_OPTIONS_VISIBLE':
-         const { id, val } = action.payload;
-         return updateExtraOptions(state, id, val, undefined);
-      
-      case 'UPDATE_EXTRA_OPTIONS_TEXT':
-         const { text } = action.payload;
-         return updateExtraOptions(state, action.payload.id, undefined, text);
+         return updateOrders(state, action.payload.id, 0, null, selectedAttribute);
 
       default:
          return state;
