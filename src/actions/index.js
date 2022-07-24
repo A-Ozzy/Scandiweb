@@ -1,3 +1,32 @@
+
+const updateLoadingProductList = (value) => {
+   return {
+      type: 'UPDATE_LOADING_PRODUCT_LIST',
+      payload: value,
+   };
+};
+
+const updateLoadingProductCard = (value) => {
+   return {
+      type: 'UPDATE_LOADING_PRODUCT',
+      payload: value,
+   };
+};
+const updateHasErrorProductList = (value) => {
+   return {
+      type: 'UPDATE_HAS_ERROR',
+      payload: value,
+   };
+};
+
+const updateHasErrorProductCard = (value) => {
+  
+   return {
+      type: 'UPDATE_HAS_ERROR_PRODUCT',
+      payload: value,
+   };
+}
+
 const getCategoriesAndCurrency = (newCategryAndCurrency) => {
    return {
       type: 'FETCH_CATEGORIES_AND_CURRENCIES_REQUEST',
@@ -112,6 +141,10 @@ const clearSelectedAttributesInProduct = () => {
 }
 
 export {
+   updateLoadingProductList,
+   updateLoadingProductCard,
+   updateHasErrorProductList,
+   updateHasErrorProductCard,
    getCategoriesAndCurrency,
    updateCurrency,
    updateDropdown,

@@ -1,11 +1,14 @@
 import React from "react";
-import './error-indicator.css';
+import './error-indicator.scss';
 
 
 const ErrorIndicator = () => {
 
    return (
-      <div>Error</div>
+      <div className="error">
+         <div className="error-message">Oops, something went wrong</div>
+      </div>
+      
    );
 };
 

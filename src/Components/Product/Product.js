@@ -7,10 +7,15 @@ import {
    updateActiveImg,
    updateOrders,
    updateAttributeInProduct,
-   clearSelectedAttributesInProduct
+   clearSelectedAttributesInProduct,
+   updateLoadingProductCard,
+   updateHasErrorProductCard
 } from '../../actions';
+import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator/error-indicator';
 
 import './Product.scss';
+
 
 class Product extends Component {
 
@@ -22,6 +27,8 @@ class Product extends Component {
    fetchData = new FetchingService();
 
    getProduct(id) {
+      this.props.updateLoadingProductCard(true);
+      this.props.updateHasErrorProductCard(false);
       const { getData } = this.fetchData;
 
       const query = `
@@ -59,13 +66,17 @@ class Product extends Component {
       };
 
       getData(query, variables)
-         .then((res) => this.props.updateProduct(res.product));
+         .then((res) => {
+            this.props.updateProduct(res.product);
+            this.props.updateLoadingProductCard(false);
+         })
+         .catch( _ =>{
+            this.props.updateLoadingProductCard(false);
+            this.props.updateHasErrorProductCard(true);
+         });
    };
 
    componentDidMount() {
-
-      // const { itemId } = this.props;
-      // this.getProduct(itemId);
 
       if (this.props.itemId !== this.props.product.id) {
          this.getProduct(this.props.itemId);
@@ -78,9 +89,6 @@ class Product extends Component {
          this.renderGallery();
       }
 
-      // if (this.props.itemId !== this.props.product.id) {
-      //    this.getProduct(this.props.itemId);
-      // }
    };
 
    renderGallery() {
@@ -218,8 +226,7 @@ class Product extends Component {
    };
 
    render() {
-      // console.log(this.props.product.id);
-      
+         
       const { activeImg, selectedCurrency } = this.props;
       const { name, attributes, description, prices, inStock, brand } = this.props.product;
 
@@ -235,6 +242,12 @@ class Product extends Component {
          }
       }
 
+      if (this.props.isLoadingProduct) {
+         return <Spinner/>
+      }
+      if (this.props.hasError) {
+         return <ErrorIndicator/>
+      }
       return (
          <div className={`product-page ${inStock ? "" : "out-of-stosk"}`}>
             <div className="product-img-list product-page-item">
@@ -267,12 +280,14 @@ class Product extends Component {
 };
 
 const mapStateToProps = ({
-   productReducer: { product, activeImg },
+   productReducer: { product, activeImg, isLoadingProduct, hasError },
    mainReducer: { selectedCurrency } }) => {
    return {
       product,
       activeImg,
-      selectedCurrency
+      isLoadingProduct,
+      selectedCurrency,
+      hasError,
    }
 };
 
@@ -281,7 +296,9 @@ const mapDispatchToProps = {
    updateActiveImg,
    updateOrders,
    updateAttributeInProduct,
-   clearSelectedAttributesInProduct
+   clearSelectedAttributesInProduct,
+   updateLoadingProductCard,
+   updateHasErrorProductCard
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Product);

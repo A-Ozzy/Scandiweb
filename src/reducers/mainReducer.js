@@ -1,11 +1,14 @@
+
 const initialState = {
    categories: [],
    loading: true,
+   isLoadingProductList: true,
    currencies: [],
    selectedCurrency: [],
    selectedCategory: '',
    productList: [],
    dropdomnIsOpen: false,
+   hasError: false,
 }
 
 
@@ -42,6 +45,17 @@ const mainReducer = (state = initialState, action) => {
             ...state,
             productList: action.payload
          }
+      case 'UPDATE_LOADING_PRODUCT_LIST':
+         return {
+            ...state,
+            isLoadingProductList: action.payload
+         }
+      case 'UPDATE_HAS_ERROR':
+         return {
+            ...state,
+            hasError: action.payload
+         }
+      
       default:
          return state;
    }

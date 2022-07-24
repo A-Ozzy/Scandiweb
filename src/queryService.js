@@ -1,9 +1,7 @@
 export default class FetchingService {
 
    getData = async (query, variables = {}) => {
-      
       console.log('fetch');
-
       const res = await fetch("http://localhost:4000/graphql", {
          method: 'POST',
          headers: {

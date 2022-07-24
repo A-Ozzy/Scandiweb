@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-// import {  } from '../../actions';
+import { updateLoadingProductList } from '../../actions';
 import FetchingService from '../../queryService';
-import { updateOrders, fetchProductList } from '../../actions';
+import { updateOrders, fetchProductList, updateHasErrorProductList } from '../../actions';
 import { connect } from 'react-redux';
+import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator/error-indicator';
 import ProductItem from '../ProductItem';
 import cartWhite from '../../images/shoppingCart-white.svg';
 import { Link, withRouter } from 'react-router-dom';
@@ -15,19 +17,28 @@ class ProductList extends Component {
    fetchData = new FetchingService();
 
    componentDidMount() {
-      if (this.props.category !== this.props.selectedCategory) {
-         this.fetchProductData();
-      }
+      // console.log('fetch');
       
+      // if (this.props.category !== this.props.selectedCategory) {
+      //    this.fetchProductData();
+      // }
+      this.fetchProductData();
    };
 
    componentDidUpdate(prevProps) {
+      
       if (this.props.category !== prevProps.category) {
          this.fetchProductData();
       }
    };
 
+   // componentDidCatch() {
+   //    console.log("error");
+   // }
+
    fetchProductData() {
+      this.props.updateLoadingProductList(true);
+      this.props.updateHasErrorProductList(false);
       const { getData } = this.fetchData;
 
       const query = `
@@ -65,7 +76,14 @@ class ProductList extends Component {
       };
 
       getData(query, variables)
-         .then((res) => this.props.fetchProductList(res.category.products));
+         .then((res) => {
+            this.props.fetchProductList(res.category.products);
+            this.props.updateLoadingProductList(false);
+         })
+         .catch( _ =>{
+            this.props.updateLoadingProductList(false);
+            this.props.updateHasErrorProductList(true);
+         });
    };
 
    onAddToCart = (e) => {
@@ -113,9 +131,9 @@ class ProductList extends Component {
 
    render() {
       
-      const { productList } = this.props;
+      const { productList, isLoadingProductList } = this.props;
 
-      const productItem = productList.map((item) => {
+      const productItem = isLoadingProductList ? <Spinner /> : productList.map((item) => {
          return (
             <li key={item.id} className={`product-item ${!item.inStock ? "out-of-stock" : ""}`} id={item.id}>
                <Link to={`/product/${item.id}`} className="product-link">
@@ -129,6 +147,9 @@ class ProductList extends Component {
          );
       });
 
+      if (this.props.hasError) {
+         return <ErrorIndicator/>
+      }
       return (
          <div className="list-container">
             <div className="list-title">Category: {this.props.category.toUpperCase()}</div>
@@ -143,16 +164,20 @@ class ProductList extends Component {
 };
 
 
-const mapStateToProps = ({ mainReducer: { selectedCategory, productList, selectedCurrency } }) => {
+const mapStateToProps = ({ mainReducer: { selectedCategory, productList, selectedCurrency, isLoadingProductList, hasError } }) => {
    return {
       selectedCategory,
       productList,
       selectedCurrency,
+      isLoadingProductList,
+      hasError,
    }
 };
 
 const mapDispatchToProps = {
    fetchProductList,
    updateOrders,
+   updateLoadingProductList,
+   updateHasErrorProductList,
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductList));

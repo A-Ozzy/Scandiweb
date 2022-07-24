@@ -1,6 +1,8 @@
 const initialState = {
    product: {},
    activeImg: "",
+   isLoadingProduct: true,
+   hasError: false,
    
 };
 
@@ -67,7 +69,6 @@ const productReducer = (state = initialState, action) => {
    switch (action.type) {
 
       case 'UPDATE_PRODUCT':
-         
          return { 
             ...state,
             product: { ...action.payload },
@@ -83,6 +84,17 @@ const productReducer = (state = initialState, action) => {
       
       case 'CLEAR_SELECTED_ATTRIBUTES_IN_PRODUCT':
          return clearAttributes(state);
+      
+      case 'UPDATE_LOADING_PRODUCT':
+         return {
+            ...state,
+            isLoadingProduct: action.payload,
+         }
+      case 'UPDATE_HAS_ERROR_PRODUCT':
+         return {
+            ...state,
+            hasError: action.payload,
+         }
       
       default:
          return state;
