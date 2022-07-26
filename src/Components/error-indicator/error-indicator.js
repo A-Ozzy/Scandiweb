@@ -1,15 +1,17 @@
-import React from "react";
+import React, { Component } from "react";
 import './error-indicator.scss';
 
 
-const ErrorIndicator = () => {
+class ErrorIndicator extends Component {
+   render() {
 
-   return (
-      <div className="error">
-         <div className="error-message">Oops, something went wrong</div>
-      </div>
-      
-   );
+      return (
+         <div className="error">
+            <div className="error-message">Oops, something went wrong</div>
+         </div>
+
+      );
+   };
 };
 
 export default ErrorIndicator;
