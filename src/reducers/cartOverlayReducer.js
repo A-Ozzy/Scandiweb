@@ -7,13 +7,6 @@ const initialState = {
 
 };
 
-// const findItemWithKey = (state, newKey) => {
-//    return state.orders.find(({ itemKey }) => itemKey === newKey);
-// };
-
-// const findIndexWithId = (state, newId) => {
-//    return state.orders.findIndex(({ id }) => id === newId);
-// };
 
 const handlingItem = (state, product) => {
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Spinner from '../spinner';
 import logo from '../../images/logo.svg';
 import shoppingCart from '../../images/shoppingCart.svg';
-import { getCategoriesAndCurrency, updateCurrency, updateSelectedCategory, updateOpenCart } from '../../actions';
+import { getCategoriesAndCurrency, updateCurrency, updateSelectedCategory, updateOpenCart, updateDropdown } from '../../actions';
 import FetchingService from '../../queryService';
 import { withRouter, NavLink } from 'react-router-dom';
 import CartOverlay from '../CartOverlay';
@@ -44,7 +44,14 @@ class Header extends Component {
       if (this.props.isCartOpen !== prevProps.isCartOpen) {
          document.body.classList.toggle("lock");
       }
-   }
+   };
+   
+   onCartClick() {
+      if (this.props.dropdownIsOpen) {
+         this.props.updateDropdown(false);
+      }
+      this.props.updateOpenCart(this.props.isCartOpen)
+   };
 
    render() {
 
@@ -84,7 +91,7 @@ class Header extends Component {
                      <Dropdown />
                   </div>
                   <div className='header-shoppingcart'
-                     onClick={()=> this.props.updateOpenCart(this.props.isCartOpen)}>
+                     onClick={()=> this.onCartClick()}>
                      <div className="cart-icon">
                         <img src={shoppingCart} alt="shoppingcart" />
                      </div>
@@ -106,7 +113,8 @@ const mapStateToProps = ({ mainReducer: {
    loading,
    currencies,
    selectedCurrency,
-   selectedCategory
+   selectedCategory,
+   dropdownIsOpen
 },
    cartOverlayReducer: { orders, isCartOpen } }) => {
 
@@ -118,6 +126,7 @@ const mapStateToProps = ({ mainReducer: {
       selectedCategory,
       orders,
       isCartOpen,
+      dropdownIsOpen,
    }
 };
 
@@ -125,7 +134,8 @@ const mapDispatchToProps = {
    getCategoriesAndCurrency,
    updateCurrency,
    updateSelectedCategory,
-   updateOpenCart
+   updateOpenCart,
+   updateDropdown,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

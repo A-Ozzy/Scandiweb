@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateDropdown, updateCurrency } from '../../actions';
+import { updateDropdown, updateCurrency, updateOpenCart } from '../../actions';
 
 import "./Dropdown.scss";
 
@@ -15,9 +15,16 @@ class Dropdown extends Component {
       this.props.updateDropdown(false);
    };
 
+   onDropdownClick() {
+      if (this.props.isCartOpen) {
+         this.props.updateOpenCart(this.props.isCartOpen);
+      }
+      this.props.updateDropdown(!this.props.dropdownIsOpen);
+   }
+
    render() {
 
-      const { dropdomnIsOpen, updateDropdown, currencies, selectedCurrency } = this.props;
+      const { dropdownIsOpen, currencies, selectedCurrency } = this.props;
       const dropdownItem = currencies.map(item => {
          return (
             <div key={item.label}
@@ -30,9 +37,9 @@ class Dropdown extends Component {
 
       return (
          <div className="dropdown">
-            <div className="dropdown-btn" onClick={() => updateDropdown(!dropdomnIsOpen)}>{selectedCurrency.symbol}</div>
+            <div className="dropdown-btn" onClick={() => this.onDropdownClick()}>{selectedCurrency.symbol}</div>
             <div className="dropdown-content">
-               {dropdomnIsOpen && dropdownItem}
+               {dropdownIsOpen && dropdownItem}
             </div>
 
 
@@ -41,18 +48,22 @@ class Dropdown extends Component {
    }
 }
 
-const mapStateToProps = ({ mainReducer: { dropdomnIsOpen, currencies, selectedCurrency } }) => {
+const mapStateToProps = ({
+   mainReducer: { dropdownIsOpen, currencies, selectedCurrency },
+   cartOverlayReducer: {isCartOpen}}) => {
 
    return {
-      dropdomnIsOpen,
+      dropdownIsOpen,
       currencies,
-      selectedCurrency
+      selectedCurrency,
+      isCartOpen
    }
 };
 
 const mapDispatchToProps = {
    updateDropdown,
-   updateCurrency
+   updateCurrency,
+   updateOpenCart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dropdown);

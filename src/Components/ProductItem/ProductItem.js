@@ -5,7 +5,7 @@ import './ProductItem.scss';
 class ProductItem extends Component {
 
    render() {
-      const { gallery, name, prices, attributes, } = this.props.item;
+      const { gallery, name, prices, attributes, brand } = this.props.item;
 
 
       let price = 0;
@@ -44,7 +44,7 @@ class ProductItem extends Component {
             <div className="item-img">
                <img src={gallery ? gallery[0] : ""} alt="product" />
             </div>
-            <div className="item-name">{name}</div>
+            <div className="item-name">{brand} {name}</div>
             <ul className='attribute-list'>
                {swatch}
             </ul>

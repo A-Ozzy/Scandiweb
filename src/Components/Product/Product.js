@@ -214,7 +214,7 @@ class Product extends Component {
 
       const { attributes, selectedAttributes } = this.props.product;
       const isAttrSelected = this.props.product.hasOwnProperty("selectedAttributes");
-      console.log(isAttrSelected, attributes);
+   
       
       if (isAttrSelected && attributes.length === Object.keys(selectedAttributes).length) {
          this.props.updateOrders(this.props);

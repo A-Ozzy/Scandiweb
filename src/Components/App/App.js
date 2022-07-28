@@ -4,15 +4,17 @@ import Header from '../Header';
 import Cart from '../Cart';
 import ProductList from '../ProductList';
 import Product from '../Product';
+import { connect } from 'react-redux';
+import { updateDropdown } from '../../actions';
 
 import './App.scss';
 
 
-export default class App extends Component {
-  
+class App extends Component {
+
    render() {
       return (
-         <div className="container">
+         <div className="container" onClick={() => this.props.dropdownIsOpen && this.props.updateDropdown(false)}>
             <Header />
             <Switch>
                <Redirect from="/" to="/category/all" component={ProductList} exact />
@@ -30,4 +32,17 @@ export default class App extends Component {
 };
 
 
+const mapStateToProps = ({
+   mainReducer: { dropdownIsOpen }}) => {
+
+   return {
+      dropdownIsOpen,
+   }
+};
+
+const mapDispatchToProps = {
+   updateDropdown,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 

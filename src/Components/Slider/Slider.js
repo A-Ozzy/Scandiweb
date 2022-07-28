@@ -23,7 +23,7 @@ class Arrows extends Component {
 class Slider extends Component {
 
    onButtonNavigate = (e) => {
-      const { updateCurrentSlideImg, gallery, id, orders, itemKey } = this.props;
+      const { updateCurrentSlideImg, gallery, orders, itemKey } = this.props;
       const item = orders.find(({ itemKey }) => itemKey === this.props.itemKey);
       const { currentSlideImg } = item;
 

@@ -20,7 +20,7 @@ class OverlayItem extends Component {
       }
 
       // render attributes
-      return obj.map((itm, i) => {
+      return obj.map((itm) => {
          
          return (
             <div key={`${Date.now()}${itm.name}`} className="items-atributes">
@@ -47,7 +47,7 @@ class OverlayItem extends Component {
    getCurrentPrice() {
      
       const { item } = this.props;
-      const { prices, itemKey} = this.props.item;
+      const { prices } = this.props.item;
 
       let priceInfo;
 

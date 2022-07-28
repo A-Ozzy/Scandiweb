@@ -46,6 +46,7 @@ class ProductList extends Component {
                category(input:{title: $category}){
                   products {
                      id
+                     brand
                      name
                      inStock
                      gallery
