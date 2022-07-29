@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { updateLoadingProductList } from '../../actions';
 import FetchingService from '../../queryService';
 import { updateOrders, fetchProductList, updateHasErrorProductList } from '../../actions';
@@ -18,7 +19,7 @@ class ProductList extends Component {
 
    componentDidMount() {
       // console.log('fetch');
-      
+
       // if (this.props.category !== this.props.selectedCategory) {
       //    this.fetchProductData();
       // }
@@ -26,15 +27,11 @@ class ProductList extends Component {
    };
 
    componentDidUpdate(prevProps) {
-      
+
       if (this.props.category !== prevProps.category) {
          this.fetchProductData();
       }
    };
-
-   // componentDidCatch() {
-   //    console.log("error");
-   // }
 
    fetchProductData() {
       this.props.updateLoadingProductList(true);
@@ -81,7 +78,7 @@ class ProductList extends Component {
             this.props.fetchProductList(res.category.products);
             this.props.updateLoadingProductList(false);
          })
-         .catch( _ =>{
+         .catch(_ => {
             this.props.updateLoadingProductList(false);
             this.props.updateHasErrorProductList(true);
          });
@@ -131,7 +128,7 @@ class ProductList extends Component {
    }
 
    render() {
-      
+
       const { productList, isLoadingProductList } = this.props;
 
       const productItem = isLoadingProductList ? <Spinner /> : productList.map((item) => {
@@ -149,7 +146,7 @@ class ProductList extends Component {
       });
 
       if (this.props.hasError) {
-         return <ErrorIndicator/>
+         return <ErrorIndicator />
       }
       return (
          <div className="list-container">
@@ -164,6 +161,18 @@ class ProductList extends Component {
    }
 };
 
+ProductList.propTypes = {
+   selectedCategory: PropTypes.string,
+   productList: PropTypes.arrayOf(PropTypes.object),
+   selectedCurrency: PropTypes.object,
+   isLoadingProductList: PropTypes.bool,
+   hasError: PropTypes.bool,
+
+   fetchProductList: PropTypes.func,
+   updateOrders: PropTypes.func,
+   updateLoadingProductList: PropTypes.func,
+   updateHasErrorProductList: PropTypes.func,
+};
 
 const mapStateToProps = ({ mainReducer: { selectedCategory, productList, selectedCurrency, isLoadingProductList, hasError } }) => {
    return {

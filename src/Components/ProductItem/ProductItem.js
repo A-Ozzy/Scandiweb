@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux/';
 import './ProductItem.scss';
 
@@ -53,6 +54,15 @@ class ProductItem extends Component {
       );
    }
 }
+
+ProductItem.proprTypes = {
+   selectedCurrency: PropTypes.object,
+   gallery: PropTypes.arrayOf(PropTypes.string),
+   name: PropTypes.string,
+   prices: PropTypes.arrayOf(PropTypes.object),
+   attributes: PropTypes.arrayOf(PropTypes.object),
+   brand: PropTypes.string,
+};
 
 const mapStateToProps = ({ mainReducer: { selectedCurrency } }) => {
    return {

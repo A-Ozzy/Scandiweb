@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { updateDropdown, updateCurrency, updateOpenCart } from '../../actions';
 
@@ -11,7 +12,7 @@ class Dropdown extends Component {
       const label = e.target.innerHTML.slice(-3).trim();
       const symbol = e.target.innerHTML.slice(0, -3).trim();
 
-      this.props.updateCurrency({label, symbol});
+      this.props.updateCurrency({ label, symbol });
       this.props.updateDropdown(false);
    };
 
@@ -41,16 +42,25 @@ class Dropdown extends Component {
             <div className="dropdown-content">
                {dropdownIsOpen && dropdownItem}
             </div>
-
-
          </div>
       );
    }
 }
 
+Dropdown.propTypes = {
+   dropdownIsOpen: PropTypes.bool,
+   currencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+   selectedCurrency: PropTypes.object,
+   isCartOpen: PropTypes.bool,
+
+   updateDropdown: PropTypes.func,
+   updateCurrency: PropTypes.func,
+   updateOpenCart: PropTypes.func,
+};
+
 const mapStateToProps = ({
    mainReducer: { dropdownIsOpen, currencies, selectedCurrency },
-   cartOverlayReducer: {isCartOpen}}) => {
+   cartOverlayReducer: { isCartOpen } }) => {
 
    return {
       dropdownIsOpen,

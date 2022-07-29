@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../spinner';
 import logo from '../../images/logo.svg';
@@ -45,7 +46,7 @@ class Header extends Component {
          document.body.classList.toggle("lock");
       }
    };
-   
+
    onCartClick() {
       if (this.props.dropdownIsOpen) {
          this.props.updateDropdown(false);
@@ -73,7 +74,7 @@ class Header extends Component {
       const quantity = orders.reduce((acc, curr) => acc + curr.count, 0);
 
       return (
-         <div className={`header ${isCartOpen ?'active' : ''}`}>
+         <div className={`header ${isCartOpen ? 'active' : ''}`}>
             <div className="header-item">
                <ul className="header-list"
                   onClick={this.onCategoryChange}>
@@ -91,7 +92,7 @@ class Header extends Component {
                      <Dropdown />
                   </div>
                   <div className='header-shoppingcart'
-                     onClick={()=> this.onCartClick()}>
+                     onClick={() => this.onCartClick()}>
                      <div className="cart-icon">
                         <img src={shoppingCart} alt="shoppingcart" />
                      </div>
@@ -105,6 +106,23 @@ class Header extends Component {
          </div >
       );
    }
+}
+
+Header.propTypes = {
+   categories: PropTypes.arrayOf(PropTypes.object).isRequired,
+   loading: PropTypes.bool,
+   selectedCurrency: PropTypes.object,
+   orders: PropTypes.arrayOf(PropTypes.object),
+   isCartOpen: PropTypes.bool,
+   currencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+   selectedCategory: PropTypes.string,
+   dropdownIsOpen: PropTypes.bool,
+
+   getCategoriesAndCurrency: PropTypes.func,
+   updateCurrency: PropTypes.func,
+   updateSelectedCategory: PropTypes.func,
+   updateOpenCart: PropTypes.func,
+   updateDropdown: PropTypes.func,
 }
 
 

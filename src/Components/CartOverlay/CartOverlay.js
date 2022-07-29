@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OverlayItem from '../OverlayItem';
 import { Link } from 'react-router-dom';
@@ -45,16 +46,24 @@ class CartOverlay extends Component {
             </div>
             <div className="overlay-buttons buttons">
                <Link to="/cart" className="buttons-view btn"
-               onClick={()=>this.props.updateOpenCart(isCartOpen)}>view bag</Link>
+                  onClick={() => this.props.updateOpenCart(isCartOpen)}>view bag</Link>
                <button className="buttons-check btn"
-               onClick={()=>this.props.updateOpenCart(isCartOpen)}>check out</button>
+                  onClick={() => this.props.updateOpenCart(isCartOpen)}>check out</button>
             </div>
          </div>
       )
    }
 }
 
-const mapStateToProps = ({ cartOverlayReducer: { orders, total, isCartOpen} }) => {
+CartOverlay.propTypes = {
+   orders: PropTypes.arrayOf(PropTypes.object),
+   total: PropTypes.number,
+   isCartOpen: PropTypes.bool,
+
+   updateOpenCart: PropTypes.func,
+};
+
+const mapStateToProps = ({ cartOverlayReducer: { orders, total, isCartOpen } }) => {
    return {
       orders,
       total,

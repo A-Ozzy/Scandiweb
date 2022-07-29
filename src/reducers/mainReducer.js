@@ -4,7 +4,7 @@ const initialState = {
    loading: true,
    isLoadingProductList: true,
    currencies: [],
-   selectedCurrency: [],
+   selectedCurrency: {},
    selectedCategory: '',
    productList: [],
    dropdownIsOpen: false,

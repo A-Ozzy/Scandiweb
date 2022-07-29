@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { updateCurrentSlideImg } from '../../actions';
 
@@ -52,6 +53,12 @@ class Slider extends Component {
       );
    }
 };
+
+Slider.propsTypes = {
+   gallery: PropTypes.arrayOf(PropTypes.string),
+   orders: PropTypes.arrayOf(PropTypes.object),
+};
+
 
 const mapStateToProps = ({ cartOverlayReducer: { orders } }) => {
    return {

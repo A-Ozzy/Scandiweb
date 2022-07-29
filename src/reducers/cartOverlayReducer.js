@@ -203,7 +203,7 @@ const updateOrders = (state, product = {}, quantity, newPrice, newAttributes) =>
 
    return {
       ...updatedState,
-      total: calcTotal.toFixed(2),
+      total: Number(calcTotal.toFixed(2)),
    };
 
 };

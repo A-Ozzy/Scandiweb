@@ -1,4 +1,5 @@
 import React, { Component, createRef } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { updateAttributeInItem, updateAttributeInProduct } from '../../actions';
 
@@ -93,6 +94,13 @@ class AttributesList extends Component {
          </div>
       );
    }
+};
+
+AttributesList.ppropTypes = {
+   orders: PropTypes.arrayOf(PropTypes.object),
+   product: PropTypes.object,
+   updateAttributeInItem: PropTypes.func,
+   updateAttributeInProduct: PropTypes.func,
 };
 
 const mapStateToProps = ({

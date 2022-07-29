@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import OverlayItem from '../OverlayItem';
 import { connect } from 'react-redux';
 
@@ -48,6 +49,12 @@ class Cart extends Component {
 
    }
 }
+
+Cart.propTypes = {
+   orders: PropTypes.arrayOf(PropTypes.object),
+   total: PropTypes.number,
+   selectedCurrency: PropTypes.object,
+};
 
 const mapStateToProps = ({ mainReducer: { selectedCurrency }, cartOverlayReducer: { orders, total } }) => {
    return {

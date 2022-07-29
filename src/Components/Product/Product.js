@@ -1,4 +1,5 @@
 import React, { Component, createRef } from 'react';
+import PropTypes from 'prop-types';
 import FetchingService from '../../queryService';
 import { connect } from 'react-redux';
 import { Markup } from 'interweave';
@@ -70,7 +71,7 @@ class Product extends Component {
             this.props.updateProduct(res.product);
             this.props.updateLoadingProductCard(false);
          })
-         .catch( _ =>{
+         .catch(_ => {
             this.props.updateLoadingProductCard(false);
             this.props.updateHasErrorProductCard(true);
          });
@@ -114,7 +115,7 @@ class Product extends Component {
    };
 
    onAttributeClick = (e) => {
-     
+
       const targetColor = e.target.parentElement.classList.contains("attribute-value");
       const targetAttribute = e.target.classList.value.includes("attribute-value");
 
@@ -214,8 +215,8 @@ class Product extends Component {
 
       const { attributes, selectedAttributes } = this.props.product;
       const isAttrSelected = this.props.product.hasOwnProperty("selectedAttributes");
-   
-      
+
+
       if (isAttrSelected && attributes.length === Object.keys(selectedAttributes).length) {
          this.props.updateOrders(this.props);
          this.props.clearSelectedAttributesInProduct();
@@ -231,7 +232,7 @@ class Product extends Component {
    };
 
    render() {
-         
+
       const { activeImg, selectedCurrency } = this.props;
       const { name, attributes, description, prices, inStock, brand } = this.props.product;
 
@@ -248,10 +249,10 @@ class Product extends Component {
       }
 
       if (this.props.isLoadingProduct) {
-         return <Spinner/>
+         return <Spinner />
       }
       if (this.props.hasError) {
-         return <ErrorIndicator/>
+         return <ErrorIndicator />
       }
       return (
          <div className={`product-page ${inStock ? "" : "out-of-stosk"}`}>
@@ -282,6 +283,22 @@ class Product extends Component {
          </div>
       );
    }
+};
+
+Product.propTypes = {
+   product: PropTypes.object,
+   activeImg: PropTypes.string,
+   isLoadingProduct: PropTypes.bool,
+   selectedCurrency: PropTypes.object,
+   hasError: PropTypes.bool,
+
+   updateProduct: PropTypes.func,
+   updateActiveImg: PropTypes.func,
+   updateOrders: PropTypes.func,
+   updateAttributeInProduct: PropTypes.func,
+   clearSelectedAttributesInProduct: PropTypes.func,
+   updateLoadingProductCard: PropTypes.func,
+   updateHasErrorProductCard: PropTypes.func,
 };
 
 const mapStateToProps = ({
