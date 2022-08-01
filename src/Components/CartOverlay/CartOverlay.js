@@ -35,7 +35,7 @@ class CartOverlay extends Component {
 
       return (
          <div className='overlay' onClick={e => e.stopPropagation()}>
-            <div className="overlay-title">My Bag: <span>{orders.length} items</span></div>
+            <div className="overlay-title">My Bag, <span>{orders.length} items</span></div>
             <div className="overlay-list">
                {overlayItems}
 

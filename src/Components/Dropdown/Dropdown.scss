@@ -5,26 +5,23 @@
       font-weight: 500;
       font-size: 18px;
       line-height: 29px;
-      // min-width: 30px;
-      // max-width: 30px;
-      padding: 0 20px 0 0;
-      cursor: pointer;
       position: relative;
-      &:after {
-         content: "";
-         position: absolute;
-         bottom: 30%;
-         right: 5px;
-         width: 6px;
-         height: 3px;
-         background: url("../../images/arrowD.svg") 0 0 / cover no-repeat;
+   }
+   &-container{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      cursor: pointer;
+      min-width: 25px;
+      img{
+         object-fit: contain;
       }
    }
    &-content {
       position: absolute;
       background: #ffffff;
       top: 40px;
-      left: -50%;
+      left: -90%;
       min-width: 115px;
       z-index: 4;
       box-shadow: 0 0 10px #EEEEEE;
@@ -38,5 +35,10 @@
       &:hover{
          background: #EEEEEE;
       }
+   }
+}
+.dropdown-icon.open{
+   img{
+      transform: rotate(180deg);
    }
 }

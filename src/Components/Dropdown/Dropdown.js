@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { updateDropdown, updateCurrency, updateOpenCart } from '../../actions';
+import arrowD from '../../images/arrowD.svg';
 
 import "./Dropdown.scss";
 
@@ -38,7 +39,16 @@ class Dropdown extends Component {
 
       return (
          <div className="dropdown">
-            <div className="dropdown-btn" onClick={() => this.onDropdownClick()}>{selectedCurrency.symbol}</div>
+            <div className="dropdown-container"
+               onClick={() => this.onDropdownClick()}>
+               <div className="dropdown-btn">
+                  {selectedCurrency.symbol}
+               </div>
+               <div className={`dropdown-icon ${dropdownIsOpen ? 'open': ''}`}>
+                  <img src={arrowD} alt="" />
+               </div>
+            </div>
+
             <div className="dropdown-content">
                {dropdownIsOpen && dropdownItem}
             </div>

@@ -25,11 +25,6 @@
          box-shadow: 0 0 0 #559e68;
       }
    }
-   .item-info-count-extra{
-      display: block;
-      display: flex;
-      flex-direction: column;
-   }
 }
 .infoitem {
    display: flex;
@@ -54,8 +49,26 @@
       height: 288px;
       width: 200px;
    }
-   .slider-navigation{
+   .slider-navigation {
       visibility: visible;
       opacity: 1;
+   }
+   .item-brand {
+      font-weight: 600;
+      font-size: 30px;
+      line-height: 27px;
+      margin: 0px 0px 30px 0px;
+   }
+   .item-name-o {
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 27px;
+   }
+   .attribute-title {
+      text-transform: uppercase;
+   }
+   .btns {
+      height: 45px;
+      width: 45px;
    }
 }

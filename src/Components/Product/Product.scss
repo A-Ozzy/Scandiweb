@@ -3,6 +3,38 @@
 .product-page {
    display: flex;
    margin: 80px 0px 20px;
+   .attributes ul {
+      li {
+         width: 63px;
+         height: 45px;
+         cursor: pointer;
+         font-family: "Source Sans Pro";
+         font-weight: 400;
+         font-size: 16px;
+         line-height: 18px;
+      }
+      li:not(:last-child) {
+         margin: 0px 10px 10px 0px;
+      }
+   }
+   .attribute-list.color {
+      li {
+         font-size: 1px;
+         width: 30px;
+         height: 30px;
+      }
+      div {
+         width: 32px;
+         height: 32px;
+      }
+   }
+   .attribute-title {
+      font-family: "Roboto Condensed";
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 18px;
+      text-transform: uppercase;
+   }
 }
 
 .product-page-item {
@@ -23,22 +55,28 @@
 }
 
 .product-img-list {
-   max-height: 710px;
+   max-height: 600px;
    min-width: 120px;
    overflow-x: auto;
+   // direction: rtl;
+   // &::-webkit-scrollbar {
+   //    width: 6px;
+   //    background-color: rgba(245, 245, 245, 0.8);
+   // }
+   // &::-webkit-scrollbar-thumb {
+   //    border-radius: 3px;
+   //    background-color: rgb(94, 206, 123);
+   //    -webkit-box-shadow: inset 2px 0 3px rgb(255, 255, 255);
+   //             box-shadow: inset 2px 0 3px rgb(255, 255, 255);
+   // }
+   // &::-webkit-scrollbar-track {
+   //    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+   //             box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+   //    background-color: #f5f5f5;
+   //    border-radius: 10px;
+   // }
    &::-webkit-scrollbar {
-      width: 6px;
-      background-color: rgba(245, 245, 245, 0.8);
-   }
-   &::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      background-color: rgb(94, 206, 123);
-      -webkit-box-shadow: inset 2px 0 3px rgb(255, 255, 255);
-   }
-   &::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
-      background-color: #f5f5f5;
-      border-radius: 10px;
+      display: none;
    }
 }
 .img-list-item {
@@ -121,15 +159,17 @@
       border-radius: 3px;
       background-color: rgb(94, 206, 123);
       -webkit-box-shadow: inset 2px 0 3px rgb(255, 255, 255);
+      box-shadow: inset 2px 0 3px rgb(255, 255, 255);
    }
    &::-webkit-scrollbar-track {
       -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
       background-color: #f5f5f5;
       border-radius: 10px;
    }
 
    //============
-  
+
    h1,
    h2,
    h3,
@@ -137,8 +177,8 @@
    h5,
    h6,
    ul,
-   ol, 
-   li, 
+   ol,
+   li,
    p {
       all: revert;
    }

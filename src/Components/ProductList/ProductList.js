@@ -129,7 +129,7 @@ class ProductList extends Component {
 
    render() {
 
-      const { productList, isLoadingProductList } = this.props;
+      const { productList, isLoadingProductList, category } = this.props;
 
       const productItem = isLoadingProductList ? <Spinner /> : productList.map((item) => {
          return (
@@ -150,7 +150,7 @@ class ProductList extends Component {
       }
       return (
          <div className="list-container">
-            <div className="list-title">Category: {this.props.category.toUpperCase()}</div>
+            <div className="list-title">{`${category[0].toUpperCase()}${category.slice(1)}`}</div>
             <div className="product-item-container">
                <ul className="product-item-list">
                   {productItem}

@@ -270,7 +270,7 @@ class Product extends Component {
                <div ref={this.productAttributeRef} className="items-attributes attributes">
                   {attributeItems}
                </div>
-               <div className="product-price-title">price:</div>
+               <div className="product-price-title">PRICE:</div>
                <div className="product-price">
                   <span>{priceInfo?.currency.symbol}</span>{priceInfo?.amount}
                </div>

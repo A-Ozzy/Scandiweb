@@ -32,7 +32,7 @@ class Cart extends Component {
             <div className="cart-info">
                <div className="infoitem">
                   <div className="infoitem-titles">
-                     <div className="infoitem-name">Tax21%:</div>
+                     <div className="infoitem-name">Tax 21%:</div>
                      <div className="infoitem-name">Quantity:</div>
                      <div className="infoitem-name">Total:</div>
                   </div>
