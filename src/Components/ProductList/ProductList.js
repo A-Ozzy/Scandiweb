@@ -134,7 +134,7 @@ class ProductList extends Component {
       const productItem = isLoadingProductList ? <Spinner /> : productList.map((item) => {
          return (
             <li key={item.id} className={`product-item ${!item.inStock ? "out-of-stock" : ""}`} id={item.id}>
-               <Link to={`/product/${item.id}`} className="product-link">
+               <Link to={`/playlist/${item.id}`} className="product-link">
                   <ProductItem item={item} />
                </Link>
                <div className="product-item-cart"
